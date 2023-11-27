@@ -15,7 +15,7 @@ tap.test('Boss fight behavior tree test', async (t) => {
   /*
   // could also be written as:
   sutra.addCondition('isBoss', {
-    operator: 'equals',
+    op: 'equals',
     property: 'type',
     value: 'BOSS'
   });
@@ -24,7 +24,7 @@ tap.test('Boss fight behavior tree test', async (t) => {
   
   // use standard Sutra DSL for condition
   sutra.addCondition('isHealthLow', {
-    operator: 'lessThan',
+    op: 'lessThan',
     property: 'health',
     value: 50
   });

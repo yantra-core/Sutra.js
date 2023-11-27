@@ -10,7 +10,7 @@ gameBehavior.addCondition('isEnemyNear', (data) => {
 
 // adding conditions with DSL
 gameBehavior.addCondition('isHealthLow', {
-  operator: 'lessThan',
+  op: 'lessThan',
   property: 'health',
   value: 50
 });

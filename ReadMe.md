@@ -20,15 +20,18 @@ Sutra is a versatile library for creating and managing behavior trees in JavaScr
 
 Sutra supports a range of conditional and logic operators, enabling complex decision-making structures within behavior trees.
 
-| Operator     | Description                                      | Example Usage                                      |
-|--------------|--------------------------------------------------|----------------------------------------------------|
-| `lessThan`   | True if a property is less than a given value.   | `{ "operator": "lessThan", "property": "health", "value": 50 }` |
-| `greaterThan`| True if a property is greater than a given value.| `{ "operator": "greaterThan", "property": "health", "value": 50 }` |
-| `equals`     | True if a property equals a given value.         | `{ "operator": "equals", "property": "type", "value": "BOSS" }` |
-| `notEquals`  | True if a property does not equal a given value. | `{ "operator": "notEquals", "property": "type", "value": "BOSS" }` |
-| `and`        | True if all provided conditions are true.        | `{ "operator": "and", "conditions": ["isBoss", "isHealthLow"] }` |
-| `or`         | True if any of the provided conditions are true. | `{ "operator": "or", "conditions": ["isBoss", "isPlayer"] }` |
-| `not`        | True if the provided condition is false.         | `{ "operator": "not", "condition": "isBoss" }` |
+| Operator               | Alias            | Description                                       | Example Usage                                          |
+|------------------------|------------------|---------------------------------------------------|--------------------------------------------------------|
+| `equals`               | `eq`, `==`       | True if a property equals a given value.          | `{ "op": "equals", "property": "type", "value": "BOSS" }` |
+| `notEquals`            | `neq`, `!=`      | True if a property does not equal a given value.  | `{ "op": "notEquals", "property": "type", "value": "BOSS" }` |
+| `lessThan`             | `lt`, `<`        | True if a property is less than a given value.    | `{ "op": "lessThan", "property": "health", "value": 50 }` |
+| `lessThanOrEqual`      | `lte`, `<=`      | True if a property is less than or equal to a value. | `{ "op": "lessThanOrEqual", "property": "health", "value": 50 }` |
+| `greaterThan`          | `gt`, `>`        | True if a property is greater than a given value. | `{ "op": "greaterThan", "property": "health", "value": 50 }` |
+| `greaterThanOrEqual`   | `gte`, `>=`      | True if a property is greater than or equal to a value. | `{ "op": "greaterThanOrEqual", "property": "health", "value": 50 }` |
+| `and`                  | `&&`, `and`      | True if all provided conditions are true.         | `{ "op": "and", "conditions": ["isBoss", "isHealthLow"] }` |
+| `or`                   | `||`, `or`       | True if any of the provided conditions are true.  | `{ "op": "or", "conditions": ["isBoss", "isPlayer"] }` |
+| `not`                  | `!`, `not`       | True if the provided condition is false.          | `{ "op": "not", "condition": "isBoss" }` |
+
 
 
 ## Simple Usage Example
@@ -44,7 +47,7 @@ let sutra = new Sutra();
 // Define conditions
 sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
 sutra.addCondition('isHealthLow', {
-  operator: 'lessThan',
+  op: 'lessThan',
   property: 'health',
   value: 50
 });
@@ -110,7 +113,7 @@ The Sutra JSON protocol provides a structured format for defining behavior trees
 ### Composite Condition Object
 
 - A composite condition object uses logical operators (`and`, `or`, `not`) to combine multiple conditions.
-- **Example**: `{ "operator": "and", "conditions": ["isBoss", "isHealthLow"] }`
+- **Example**: `{ "op": "and", "conditions": ["isBoss", "isHealthLow"] }`
 
 ### Action Object
 
@@ -126,7 +129,7 @@ The Sutra JSON protocol provides a structured format for defining behavior trees
 ```json
 [
   {
-    "if": { "operator": "and", "conditions": ["isBoss", "isHealthLow"] },
+    "if": { "op": "and", "conditions": ["isBoss", "isHealthLow"] },
     "then": [
       {
         "action": "initiateBossFight",

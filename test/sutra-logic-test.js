@@ -1,21 +1,20 @@
 import tap from 'tape';
 import Sutra from '../lib/sutra.js';
 
-
 tap.test('AND composite condition test', async (t) => {
   let sutra = new Sutra();
   let actionExecuted = false;
 
   sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
   sutra.addCondition('isHealthLow', {
-    operator: 'lessThan',
+    op: 'lessThan',
     property: 'health',
     value: 50
   });
 
   // Composite AND condition
   sutra.addCondition('isBossAndHealthLow', {
-    operator: 'and',
+    op: 'and',
     conditions: ['isBoss', 'isHealthLow']
   });
 
@@ -45,7 +44,7 @@ tap.test('OR composite condition test', async (t) => {
   sutra.addCondition('isPlayer', (entity) => entity.type === 'PLAYER');
 
   sutra.addCondition('isBossOrPlayer', {
-    operator: 'or',
+    op: 'or',
     conditions: ['isBoss', 'isPlayer']
   });
 
@@ -80,7 +79,7 @@ tap.test('NOT condition test', async (t) => {
   sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
 
   sutra.addCondition('isNotBoss', {
-    operator: 'not',
+    op: 'not',
     condition: 'isBoss'
   });
 

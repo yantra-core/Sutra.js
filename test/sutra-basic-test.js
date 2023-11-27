@@ -90,7 +90,7 @@ tap.test('Sutra Library Tests', async (parent) => {
 
     // Test lessThan condition
     sutra.addCondition('isHealthLow', {
-      operator: 'lessThan',
+      op: 'lessThan',
       property: 'health',
       value: 50
     });
@@ -110,7 +110,7 @@ tap.test('Sutra Library Tests', async (parent) => {
 
     // Adding a condition using the new DSL syntax
     sutra.addCondition('isHealthLow', {
-      operator: 'lessThan',
+      op: 'lessThan',
       property: 'health',
       value: 50
     });
@@ -121,16 +121,16 @@ tap.test('Sutra Library Tests', async (parent) => {
     t.end();
   });
 
-  tap.test('Sutra DSL Operator Tests', (t) => {
+  tap.test('Sutra DSL op Tests', (t) => {
     const sutra = new Sutra();
 
-    // Test each DSL operator
-    sutra.addCondition('lessThanTest', { operator: 'lessThan', property: 'value', value: 10 });
-    sutra.addCondition('greaterThanTest', { operator: 'greaterThan', property: 'value', value: 10 });
-    sutra.addCondition('equalsTest', { operator: 'equals', property: 'value', value: 10 });
-    sutra.addCondition('notEqualsTest', { operator: 'notEquals', property: 'value', value: 10 });
-    sutra.addCondition('lessThanOrEqualTest', { operator: 'lessThanOrEqual', property: 'value', value: 10 });
-    sutra.addCondition('greaterThanOrEqualTest', { operator: 'greaterThanOrEqual', property: 'value', value: 10 });
+    // Test each DSL op
+    sutra.addCondition('lessThanTest', { op: 'lessThan', property: 'value', value: 10 });
+    sutra.addCondition('greaterThanTest', { op: 'greaterThan', property: 'value', value: 10 });
+    sutra.addCondition('equalsTest', { op: 'equals', property: 'value', value: 10 });
+    sutra.addCondition('notEqualsTest', { op: 'notEquals', property: 'value', value: 10 });
+    sutra.addCondition('lessThanOrEqualTest', { op: 'lessThanOrEqual', property: 'value', value: 10 });
+    sutra.addCondition('greaterThanOrEqualTest', { op: 'greaterThanOrEqual', property: 'value', value: 10 });
 
     // Perform tests
     t.equal(sutra.evaluateCondition('lessThanTest', { value: 5 }), true, 'lessThanTest should return true for value < 10');
