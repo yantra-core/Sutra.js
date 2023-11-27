@@ -1,6 +1,6 @@
 # Sutra
 
-![sutra-smol](https://github.com/yantra-core/sutra/assets/70011/a859d450-a222-44ed-b515-413e197f3c8b)
+![sutra](https://github.com/yantra-core/sutra/assets/70011/5a257357-3d50-4215-a564-8f3955fc3e83)
 
 
 ## JavaScript Behavior Tree Library
