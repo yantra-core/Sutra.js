@@ -29,6 +29,62 @@ Sutra supports a range of conditional and logic operators, enabling complex deci
 | `not`        | True if the provided condition is false.         | `{ "operator": "not", "condition": "isBoss" }` |
 
 
+## Simple Usage Example
+
+Below is an example of how Sutra can be used to define behavior logic for a boss fight in a game:
+
+```javascript
+import Sutra from '@yantra-core/sutra';
+
+// Create a new instance of Sutra
+let sutra = new Sutra();
+
+// Define conditions
+sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
+sutra.addCondition('isHealthLow', {
+  operator: 'lessThan',
+  property: 'health',
+  value: 50
+});
+
+// Define an action
+sutra.addAction({
+  if: 'isBoss',
+  then: [{
+    if: 'isHealthLow',
+    then: [{ 
+      action: 'entity::update', 
+      data: { color: 0xff0000, speed: 5 }
+    }]
+  }]
+});
+
+// Event listener for the action
+sutra.on('entity::update', (entity, data) => {
+  // Here is where you would put your custom code
+  console.log(`Updated entity ${entity.id} with`, data);
+});
+
+// Example game entities
+let allEntities = [
+  { id: 1, type: 'BOSS', health: 100 },
+  { id: 2, type: 'PLAYER', health: 100 }
+];
+
+// Game loop
+function gameTick() {
+  allEntities.forEach(entity => {
+    sutra.tick(entity);
+  });
+}
+
+// Running the game tick
+gameTick(); // No action triggered
+allEntities[0].health = 30; // Boss health drops below 50
+gameTick(); // Action 'entity::update' is triggered
+```
+
+
 ## Sutra Behavior Tree JSON Protocol Specification (RFC)
 
 ### Overview
