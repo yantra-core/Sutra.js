@@ -1,0 +1,33 @@
+{
+  "name": "sutra",
+  "version": "1.0.0",
+  "description": "A JavaScript behavior tree library for easily creating and managing complex behavior patterns in game development.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "tap ./test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yantra-core/sutra.git"
+  },
+  "keywords": [
+    "behavior-tree",
+    "game-development",
+    "ai",
+    "event-driven",
+    "nodejs",
+    "game-logic",
+    "json"
+  ],
+  "author": "Yantra Works",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/yantra-core/sutra/issues"
+  },
+  "homepage": "https://github.com/yantra-core/sutra#readme",
+  "devDependencies": {
+    "tap": "^18.6.1",
+    "tape": "^5.7.2"
+  }
+}
