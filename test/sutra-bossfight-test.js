@@ -1,5 +1,5 @@
 import tap from 'tape';
-import Sutra from '../lib/sutra.js';
+import Sutra from '../lib/Sutra.js';
 
 tap.test('Boss fight behavior tree test', async (t) => {
   let allEntities = [

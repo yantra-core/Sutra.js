@@ -1,5 +1,5 @@
 import tap from 'tape';
-import Sutra from '../lib/sutra.js';
+import Sutra from '../lib/Sutra.js';
 
 tap.test('Sutra Library Tests', async (parent) => {
   // Test for condition evaluation

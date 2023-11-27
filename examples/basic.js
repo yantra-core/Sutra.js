@@ -1,4 +1,4 @@
-import Sutra from '../lib/sutra.js';
+import Sutra from '../lib/Sutra.js';
 
 const gameBehavior = new Sutra();
 
