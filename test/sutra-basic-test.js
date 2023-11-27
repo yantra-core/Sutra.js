@@ -14,10 +14,8 @@ tap.test('Sutra Library Tests', async (parent) => {
     const sutra = new Sutra();
     let actionExecuted = false;
 
-    sutra.on('action', (action) => {
-      if (action === 'testAction') {
-        actionExecuted = true;
-      }
+    sutra.on('testAction', (data) => {
+      actionExecuted = true;
     });
 
     sutra.addCondition('isTrue', () => true);
@@ -50,7 +48,9 @@ tap.test('Sutra Library Tests', async (parent) => {
 
     sutra.addCondition('isTrue', () => true);
     sutra.addCondition('isAlsoTrue', () => true);
+    sutra.addCondition('isAlsoFalse', () => false);
 
+    // Test when both conditions are true
     sutra.addAction({
       if: 'isTrue',
       then: [
@@ -61,14 +61,28 @@ tap.test('Sutra Library Tests', async (parent) => {
       ]
     });
 
-    sutra.on('action', (action) => {
-      if (action === 'nestedAction') {
-        nestedActionExecuted = true;
-      }
+    sutra.on('nestedAction', () => {
+      nestedActionExecuted = true;
     });
 
     sutra.traverseNode(sutra.tree[0], {});
     t.equal(nestedActionExecuted, true, 'nestedAction should be executed when both conditions are met');
+
+    // Reset and test when the second condition is false
+    nestedActionExecuted = false;
+    sutra.tree = []; // Reset the behavior tree
+    sutra.addAction({
+      if: 'isTrue',
+      then: [
+        {
+          if: 'isAlsoFalse',
+          then: [{ action: 'nestedAction' }]
+        }
+      ]
+    });
+
+    sutra.traverseNode(sutra.tree[0], {});
+    t.equal(nestedActionExecuted, false, 'nestedAction should not be executed when the second condition is false');
   });
 
   parent.test('Sutra DSL Conditions', (t) => {
@@ -109,7 +123,7 @@ tap.test('Sutra Library Tests', async (parent) => {
 
   tap.test('Sutra DSL Operator Tests', (t) => {
     const sutra = new Sutra();
-    
+
     // Test each DSL operator
     sutra.addCondition('lessThanTest', { operator: 'lessThan', property: 'value', value: 10 });
     sutra.addCondition('greaterThanTest', { operator: 'greaterThan', property: 'value', value: 10 });
@@ -117,7 +131,7 @@ tap.test('Sutra Library Tests', async (parent) => {
     sutra.addCondition('notEqualsTest', { operator: 'notEquals', property: 'value', value: 10 });
     sutra.addCondition('lessThanOrEqualTest', { operator: 'lessThanOrEqual', property: 'value', value: 10 });
     sutra.addCondition('greaterThanOrEqualTest', { operator: 'greaterThanOrEqual', property: 'value', value: 10 });
-  
+
     // Perform tests
     t.equal(sutra.evaluateCondition('lessThanTest', { value: 5 }), true, 'lessThanTest should return true for value < 10');
     t.equal(sutra.evaluateCondition('greaterThanTest', { value: 15 }), true, 'greaterThanTest should return true for value > 10');
@@ -125,7 +139,7 @@ tap.test('Sutra Library Tests', async (parent) => {
     t.equal(sutra.evaluateCondition('notEqualsTest', { value: 15 }), true, 'notEqualsTest should return true for value != 10');
     t.equal(sutra.evaluateCondition('lessThanOrEqualTest', { value: 10 }), true, 'lessThanOrEqualTest should return true for value <= 10');
     t.equal(sutra.evaluateCondition('greaterThanOrEqualTest', { value: 10 }), true, 'greaterThanOrEqualTest should return true for value >= 10');
-  
+
     t.end();
   });
 
