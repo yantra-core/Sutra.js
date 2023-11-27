@@ -20,6 +20,7 @@ tap.test('Boss fight behavior tree test', async (t) => {
     value: 'BOSS'
   });
   */
+ 
   
   // use standard Sutra DSL for condition
   sutra.addCondition('isHealthLow', {
@@ -29,11 +30,14 @@ tap.test('Boss fight behavior tree test', async (t) => {
   });
 
   let bossHealthLowDetected = false;
+  let updatedEnt = {};
 
-  sutra.on('performCheck', (entity) => {
+  sutra.on('entity::update', (entity, data) => {
+    console.log('entity::update', entity, data)
     if (entity.type === 'BOSS') {
       console.log("Boss with health below 50 found: " + entity.id)
       bossHealthLowDetected = true;
+      updatedEnt = entity;
     }
   });
 
@@ -41,10 +45,13 @@ tap.test('Boss fight behavior tree test', async (t) => {
     if: 'isBoss',
     then: [{
       if: 'isHealthLow',
-      then: [{ action: 'performCheck' }]
+      then: [{ 
+        action: 'entity::update', 
+        data: { color: 0xff0000, speed: 5 } // Example with multiple properties
+      }]
     }]
   });
-
+  
   function gameTick() {
     allEntities.forEach(entity => {
       sutra.tick(entity);
@@ -59,6 +66,8 @@ tap.test('Boss fight behavior tree test', async (t) => {
   allEntities[0].health = 30;
   gameTick();
   t.equal(bossHealthLowDetected, true, 'Boss with health below 50 should be detected');
+
+  t.equal(updatedEnt.color, 16711680, 'Boss has updated color');
 
   // Resetting for next test
   bossHealthLowDetected = false;
