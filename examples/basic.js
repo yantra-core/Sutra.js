@@ -2,14 +2,17 @@ import Sutra from '../lib/sutra.js';
 
 const gameBehavior = new Sutra();
 
-// Adding conditions
+// Adding conditions with custom code
 gameBehavior.addCondition('isEnemyNear', (data) => {
   // Logic to check if an enemy is near, using data
   return data.enemyNear;
 });
-gameBehavior.addCondition('isHealthLow', (data) => {
-  // Logic to check if health is low, using data
-  return data.health < 50;
+
+// adding conditions with DSL
+gameBehavior.addCondition('isHealthLow', {
+  operator: 'lessThan',
+  property: 'health',
+  value: 50
 });
 
 // Registering action event listeners
