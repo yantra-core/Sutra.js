@@ -32,14 +32,20 @@ tap.test('Boss fight behavior tree test', async (t) => {
   let bossHealthLowDetected = false;
   let updatedEnt = {};
 
-  sutra.on('entity::update', (entity, data) => {
-    console.log('entity::update', entity, data)
-    if (entity.type === 'BOSS') {
-      console.log("Boss with health below 50 found: " + entity.id)
+  sutra.on('entity::update', (updatedEntity, node) => {
+    //console.log('entity::update', updatedEntity, node);
+    if (updatedEntity.type === 'BOSS') {
+      //console.log("Boss with health below 50 found: " + updatedEntity.id)
       bossHealthLowDetected = true;
-      updatedEnt = entity;
+      // updatedEntity is merged entityData + actionData
+      updatedEnt = updatedEntity;
     }
   });
+
+  // Function to generate a random color integer
+  function generateRandomColorInt() {
+    return Math.floor(Math.random() * 255);
+  }
 
   sutra.addAction({
     if: 'isBoss',
@@ -47,7 +53,7 @@ tap.test('Boss fight behavior tree test', async (t) => {
       if: 'isHealthLow',
       then: [{ 
         action: 'entity::update', 
-        data: { color: 0xff0000, speed: 5 } // Example with multiple properties
+        data: { color: generateRandomColorInt, speed: 5 } // Example with multiple properties
       }]
     }]
   });
@@ -67,7 +73,11 @@ tap.test('Boss fight behavior tree test', async (t) => {
   gameTick();
   t.equal(bossHealthLowDetected, true, 'Boss with health below 50 should be detected');
 
-  t.equal(updatedEnt.color, 16711680, 'Boss has updated color');
+  // check random value from 0-255
+  t.ok(updatedEnt.color >= 0 && updatedEnt.color <= 255, 'Boss has random color');
+  
+  // check that speed is 5
+  t.equal(updatedEnt.speed, 5, 'Boss has speed of 5');
 
   // Resetting for next test
   bossHealthLowDetected = false;
