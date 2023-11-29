@@ -8,16 +8,15 @@ Sutra is a versatile library for creating and managing behavior trees in JavaScr
 
 ## Features
 
-### Logic
-
-- Simple `if`, `then`, `else` syntax for defining behavior trees.
-- Advanced conditional logic with composite conditions (AND, OR, NOT).
-- Dynamic condition evaluation with support for entity data.
-- Action objects with scoped parameters for dynamic behavior control.
-- Event-driven architecture with `.on()` and `.emit()` methods for actions.
-- Tree querying with string selectors.
-- Supports plain English exports for easy understanding and debugging.
-- Import and Export of `sutra.json` format for behavior tree definitions.
+- **Conditional Logic** - Simple `if`, `then`, `else` constructs to define trees
+- **Composite Conditions** - Composite conditional logic using `AND`, `OR`, `NOT`
+- **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
+- **Action Control** - Define action objects with scoped parameters
+- **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
+- **Tree Querying** - Query and manipulate the tree using intuitive string selectors
+- **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
+- **Human-readable Exports** - Support for exporting sutras to plain English
+- **Sutra JSON Format** - Import and Export tree definitions in `sutra.json` format
 
 ## Conditional and Logic Operators
 

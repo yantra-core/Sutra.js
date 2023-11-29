@@ -90,3 +90,87 @@ tap.test('Sutra Integration Tests with GameState Context', async (parent) => {
     t.end();
   });
 });
+
+tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
+  parent.test('should evaluate conditions with deeply nested gameState values', async (t) => {
+    const sutra = new Sutra();
+
+    // Adding a condition to check a deeply nested value in gameState
+    sutra.addCondition('nestedValueCheck', {
+      op: 'lessThan',
+      gamePropertyPath: 'level.stats.blockCount',
+      value: 5
+    });
+
+    // Simulating a gameState with deeply nested properties
+    const gameState = {
+      level: {
+        stats: {
+          blockCount: 3
+        }
+      }
+    };
+
+    t.equal(sutra.evaluateCondition('nestedValueCheck', {}, gameState), true, 'nestedValueCheck should return true for blockCount < 5');
+
+    // Modifying the gameState to change the block count
+    gameState.level.stats.blockCount = 6;
+    t.equal(sutra.evaluateCondition('nestedValueCheck', {}, gameState), false, 'nestedValueCheck should return false for blockCount >= 5');
+
+    // Testing with different types of nested values
+    sutra.addCondition('nestedStringCheck', {
+      op: 'equals',
+      gamePropertyPath: 'level.description',
+      value: 'Level 1'
+    });
+
+    gameState.level.description = 'Level 1';
+    t.equal(sutra.evaluateCondition('nestedStringCheck', {}, gameState), true, 'nestedStringCheck should return true for matching string');
+
+    gameState.level.description = 'Level 2';
+    t.equal(sutra.evaluateCondition('nestedStringCheck', {}, gameState), false, 'nestedStringCheck should return false for non-matching string');
+
+    // Testing with an array
+    sutra.addCondition('nestedArrayLengthCheck', {
+      op: 'greaterThanOrEqual',
+      gamePropertyPath: 'level.enemies.length',
+      value: 2
+    });
+
+    gameState.level.enemies = ['enemy1', 'enemy2'];
+    t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', {}, gameState), true, 'nestedArrayLengthCheck should return true for array length >= 2');
+
+    gameState.level.enemies = ['enemy1'];
+    t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', {}, gameState), false, 'nestedArrayLengthCheck should return false for array length < 2');
+
+    t.end();
+  });
+});
+
+tap.test('Sutra GameState Array Item Test', async (parent) => {
+  parent.test('should evaluate conditions based on specific items in an array within gameState', async (t) => {
+    const sutra = new Sutra();
+
+    // Adding a condition to check a specific item in an array within gameState
+    sutra.addCondition('arrayItemCheck', {
+      op: 'equals',
+      gamePropertyPath: 'level.powerUps[1]',
+      value: 'speedBoost'
+    });
+
+    // Simulating a gameState with an array containing specific items
+    const gameState = {
+      level: {
+        powerUps: ['shield', 'speedBoost', 'extraLife']
+      }
+    };
+
+    t.equal(sutra.evaluateCondition('arrayItemCheck', {}, gameState), true, 'arrayItemCheck should return true for specific array item matching');
+
+    // Changing the array item to a different value
+    gameState.level.powerUps[1] = 'invisibility';
+    t.equal(sutra.evaluateCondition('arrayItemCheck', {}, gameState), false, 'arrayItemCheck should return false for non-matching array item');
+
+    t.end();
+  });
+});
