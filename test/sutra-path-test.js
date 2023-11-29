@@ -34,7 +34,6 @@ tap.test('Sutra Library Tests', (parent) => {
 
     // Assuming the first node added gets sutraPath 'this.tree[0]'
     const foundNode = sutra.findNode('tree[0]');
-    console.log('foundNodefoundNodefoundNode', foundNode)
     t.equal(foundNode, testNode, 'findNode should retrieve the correct node using sutraPath');
     t.end();
   });
@@ -42,7 +41,6 @@ tap.test('Sutra Library Tests', (parent) => {
   parent.test('should update a node correctly using sutraPath', (t) => {
 
     const sutra = new Sutra();
-    // ... add conditions ...
 
     sutra.addAction({ if: 'isTrue', then: [{ action: 'testAction' }] });
 

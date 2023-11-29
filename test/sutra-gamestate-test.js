@@ -102,6 +102,7 @@ tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
       value: 5
     });
 
+
     // Simulating a gameState with deeply nested properties
     const gameState = {
       level: {
@@ -142,6 +143,18 @@ tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
 
     gameState.level.enemies = ['enemy1'];
     t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', {}, gameState), false, 'nestedArrayLengthCheck should return false for array length < 2');
+
+
+    // Testing with an undefined array
+    sutra.addCondition('nestedUndefinedArrayLengthCheck', {
+      op: 'equals',
+      gamePropertyPath: 'level.items.length',
+      value: 0
+    });
+
+    // Simulating gameState where the array is undefined
+    delete gameState.level.enemies; // or gameState.level.enemies = undefined;
+    t.equal(sutra.evaluateCondition('nestedUndefinedArrayLengthCheck', {}, gameState), true, 'nestedUndefinedArrayLengthCheck should return true for undefined array length equaling 0');
 
     t.end();
   });
