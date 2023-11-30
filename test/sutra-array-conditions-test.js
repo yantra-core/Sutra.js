@@ -72,6 +72,9 @@ tap.test('Sutra - Array of Conditions Tests', async (parent) => {
   
     sutra.addCondition('isSpawner', (entity) => entity.type === 'SPAWNER');
   
+    let condition = sutra.getCondition('isSpawner');
+    t.equal(typeof condition, "function", 'Condition should exist as function')
+
     sutra.addCondition('blockCountLessThan5', { op: 'lessThan', gamePropertyPath: 'ents.BLOCK.length', value: 5 });
     sutra.addCondition('spawnerHealthAbove50', { op: 'greaterThan', property: 'health', value: 50 });
   
@@ -103,7 +106,6 @@ tap.test('Sutra - Array of Conditions Tests', async (parent) => {
 
 tap.test('Sutra - Array of Conditions Tests', async (parent) => {
 
-
   // Test for a block count between 5 and 10
   parent.test('Block Count Between 5 and 10', async (t) => {
     let sutra = new Sutra();
@@ -118,6 +120,11 @@ tap.test('Sutra - Array of Conditions Tests', async (parent) => {
       if: 'blockCountBetween5and10',
       then: [{ action: 'validateBlockCount' }]
     });
+
+    let condition = sutra.getCondition('blockCountBetween5and10');
+    t.equal(Array.isArray(condition), true, 'Condition should be an array');
+    t.equal(condition[0].op, 'greaterThan', 'First condition should be greaterThan');
+    t.equal(condition[1].op, 'lessThan', 'First condition should be greaterThan');
 
     sutra.on('validateBlockCount', () => { blockCountCorrect = true; });
 
