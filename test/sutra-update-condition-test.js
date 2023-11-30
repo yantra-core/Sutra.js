@@ -124,6 +124,18 @@ tap.test('Sutra Library Tests', async (parent) => {
   tap.test('Sutra DSL op Tests', (t) => {
     const sutra = new Sutra();
 
+    // Test addCondition function shorthand
+    sutra.addCondition('blockCountEquals0', (data, gameState) => gameState.ents.BLOCK.length === 0);
+    sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
+
+    // Test addCondition function shorthand with invalid global state lookup
+    sutra.addCondition('invalidCountEquals10', (data, gameState) => gameState.ents.INVALID.length === 10);
+
+    // Perform tests for custom function shorthand
+    t.equal(sutra.evaluateCondition('blockCountEquals0', {}, { ents: { BLOCK: [] } }), true, 'blockCountEquals0 should return true when BLOCK count is 0');
+    t.equal(sutra.evaluateCondition('blockCountEquals0', {}, { ents: { BLOCK: [{}] } }), false, 'blockCountEquals0 should return false when BLOCK count is not 0');
+    t.equal(sutra.evaluateCondition('invalidCountEquals10', {}, { ents: { BLOCK: [] } }), false, 'invalidCountEquals10 should return false when property lookup is invalid');
+
     // Test each DSL op
     sutra.addCondition('lessThanTest', { op: 'lessThan', property: 'value', value: 10 });
     sutra.addCondition('greaterThanTest', { op: 'greaterThan', property: 'value', value: 10 });
