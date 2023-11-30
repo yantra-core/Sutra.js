@@ -100,3 +100,44 @@ tap.test('Sutra - Array of Conditions Tests', async (parent) => {
   
 
 });
+
+tap.test('Sutra - Array of Conditions Tests', async (parent) => {
+
+
+  // Test for a block count between 5 and 10
+  parent.test('Block Count Between 5 and 10', async (t) => {
+    let sutra = new Sutra();
+    let blockCountCorrect = false;
+
+    sutra.addCondition('blockCountBetween5and10', [
+      { op: 'greaterThan', gamePropertyPath: 'ents.BLOCK.length', value: 5 },
+      { op: 'lessThan', gamePropertyPath: 'ents.BLOCK.length', value: 10 }
+    ]);
+
+    sutra.addAction({
+      if: 'blockCountBetween5and10',
+      then: [{ action: 'validateBlockCount' }]
+    });
+
+    sutra.on('validateBlockCount', () => { blockCountCorrect = true; });
+
+    const gameState = {
+      ents: { BLOCK: new Array(7).fill({}) } // 7 blocks, should satisfy the condition
+    };
+
+    sutra.tick({}, gameState);
+    t.equal(blockCountCorrect, true, 'Should validate when block count is between 5 and 10');
+
+    gameState.ents.BLOCK = new Array(4).fill({}); // 4 blocks, should not satisfy the condition
+    blockCountCorrect = false; // reset the flag for the next test
+    sutra.tick({}, gameState);
+    t.equal(blockCountCorrect, false, 'Should not validate when block count is less than 5');
+
+    gameState.ents.BLOCK = new Array(11).fill({}); // 11 blocks, should not satisfy the condition
+    blockCountCorrect = false; // reset the flag for the next test
+    sutra.tick({}, gameState);
+    t.equal(blockCountCorrect, false, 'Should not validate when block count is greater than 10');
+
+    t.end();
+  });
+});
