@@ -99,3 +99,48 @@ tap.test('NOT condition test', async (t) => {
 
   t.end();
 });
+
+
+tap.test('ELSE condition test', async (t) => {
+  let sutra = new Sutra();
+  let retreatActionExecuted = false;
+  let attackEnemyActionExecuted = false;
+
+  sutra.addCondition('isEnemyNear', (entity) => entity.isEnemyNear);
+  sutra.addCondition('isHealthLow', (entity) => entity.health < 50);
+
+  sutra.addAction({
+    if: 'isEnemyNear',
+    then: [{
+      if: 'isHealthLow',
+      then: [{ action: 'retreat' }],
+      else: [{ action: 'attackEnemy' }]
+    }]
+  });
+
+  sutra.on('retreat', () => {
+    retreatActionExecuted = true;
+  });
+
+  sutra.on('attackEnemy', () => {
+    attackEnemyActionExecuted = true;
+  });
+
+  // Test case: Enemy is near and health is low, should retreat
+  let entityWithLowHealth = { id: 1, isEnemyNear: true, health: 30 };
+  sutra.tick(entityWithLowHealth);
+  t.equal(retreatActionExecuted, true, 'Retreat action should be executed when health is low');
+  t.equal(attackEnemyActionExecuted, false, 'Attack action should not be executed when health is low');
+
+  // Reset flags for the next test
+  retreatActionExecuted = false;
+  attackEnemyActionExecuted = false;
+
+  // Test case: Enemy is near and health is not low, should attack
+  let entityWithGoodHealth = { id: 2, isEnemyNear: true, health: 70 };
+  sutra.tick(entityWithGoodHealth);
+  t.equal(retreatActionExecuted, false, 'Retreat action should not be executed when health is not low');
+  t.equal(attackEnemyActionExecuted, true, 'Attack action should be executed when health is not low');
+
+  t.end();
+});
