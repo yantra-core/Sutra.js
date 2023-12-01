@@ -156,3 +156,91 @@ tap.test('Sutra Library Tests', async (parent) => {
   });
 
 });
+
+tap.test('Sutra Library Tests - update condition test', async (parent) => {
+
+  parent.test('should correctly update conditions object+object = array', async (t) => {
+    const sutra = new Sutra();
+
+    // Adding a simple condition
+    sutra.addCondition('simpleCondition', () => false);
+    sutra.updateCondition('simpleCondition', () => true);
+    t.equal(sutra.evaluateCondition('simpleCondition', {}), true, 'simpleCondition should be updated to return true');
+
+    // Updating a DSL condition
+    sutra.addCondition('dslCondition', {
+      op: 'lessThan',
+      property: 'value',
+      value: 10
+    });
+    sutra.updateCondition('dslCondition', {
+      op: 'greaterThan',
+      property: 'value',
+      value: 10
+    });
+    t.equal(sutra.evaluateCondition('dslCondition', { value: 15 }), true, 'dslCondition should be updated to return true for value > 10');
+
+    // Updating an array condition
+    sutra.addCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 5 }]);
+    sutra.updateCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 10 }]);
+    t.equal(sutra.evaluateCondition('arrayCondition', { value: 10 }), true, 'arrayCondition should be updated to return true for value == 10');
+
+    // Adding a new condition to an existing DSL condition
+    sutra.updateCondition('dslCondition', {
+      op: 'equals',
+      property: 'value',
+      value: 20
+    }, true);
+    t.equal(sutra.evaluateCondition('dslCondition', { value: 20 }), true, 'dslCondition should add a new condition and return true for value == 20');
+
+
+    t.end();
+  });
+
+  parent.test('should correctly update conditions object+array = array', async (t) => {
+    const sutra = new Sutra();
+
+    // Adding a simple condition
+    sutra.addCondition('simpleCondition', () => false);
+    sutra.updateCondition('simpleCondition', () => true);
+    t.equal(sutra.evaluateCondition('simpleCondition', {}), true, 'simpleCondition should be updated to return true');
+
+    // Updating a DSL condition
+    sutra.addCondition('dslCondition', {
+      op: 'lessThan',
+      property: 'value',
+      value: 10
+    });
+    sutra.updateCondition('dslCondition', [{
+      op: 'lessThan',
+      property: 'value',
+      value: 10
+    }, {
+      op: 'greaterThan',
+      property: 'value',
+      value: 10
+    }]);
+    t.equal(sutra.evaluateCondition('dslCondition', { value: 15 }), true, 'dslCondition should be updated to return true for value > 10');
+
+    // Updating an array condition
+    sutra.addCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 5 }]);
+    sutra.updateCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 10 }]);
+    t.equal(sutra.evaluateCondition('arrayCondition', { value: 10 }), true, 'arrayCondition should be updated to return true for value == 10');
+
+    // get the updated condition by name
+    const updatedCondition = sutra.getCondition('dslCondition');
+    // check that the updated condition is an array
+    t.equal(Array.isArray(updatedCondition), true, 'updatedCondition should be an array');
+
+    // Adding a new condition to an existing DSL condition
+    sutra.updateCondition('dslCondition', {
+      op: 'equals',
+      property: 'value',
+      value: 20
+    }, true);
+    t.equal(sutra.evaluateCondition('dslCondition', { value: 20 }), true, 'dslCondition should add a new condition and return true for value == 20');
+
+    t.end();
+  });
+
+});
