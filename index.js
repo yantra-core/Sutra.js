@@ -1,4 +1,4 @@
-import Sutra from './lib/Sutra.js';
+import Sutra from './lib/sutra.js';
 let sutra = {};
 sutra.Sutra = Sutra;
 sutra.createSutra = function () {

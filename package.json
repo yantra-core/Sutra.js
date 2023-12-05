@@ -1,6 +1,6 @@
 {
   "name": "@yantra-core/sutra",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A JavaScript behavior tree library for easily creating and managing complex behavior patterns in game development.",
   "main": "index.js",
   "type": "module",
