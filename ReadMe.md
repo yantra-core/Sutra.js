@@ -36,17 +36,176 @@ Sutra supports a range of conditional and logic operators, enabling complex deci
 
 
 
-## Simple Usage Example
+<p>
+Sutras can be exported to a human-readable format. If you don't prefer using code to define your Sutra we have a Visual Editor <a href="https://yantra.gg/mantra/examples/offline/sutra-level-editor">currently in development</a>.
+</p>
 
-Below is an example of how Sutra can be used to define behavior logic for a boss fight in a game:
+### Crafting Sutras
 
-```javascript
+Here we have the human read-able *exported* Sutra definition that we will get at the end:
+
+```md
+if isBoss
+  if isHealthLow
+    entity::updateEntity
+      color: 0xff0000
+      speed: 5
+```
+
+It's clear to read that this Sutra will be responsible for changing the color and speed of `isBoss` when `isHealthLow`.
+
+### How
+
+```js
 import Sutra from '@yantra-core/sutra';
 
-// Create a new instance of Sutra
-let sutra = new Sutra();
+// creates a new sutra instance
+const sutra = new Sutra();
 
-// Define conditions
+// adds a new condition as function which returns value
+sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
+
+// adds a new condition using DSL conditional object
+sutra.addCondition('isHealthLow', {
+  op: 'lessThan',
+  property: 'health',
+  value: 50
+});
+
+sutra.addAction({
+  if: ['isBoss', 'isHealthLow'],
+  then: [{
+    action: 'entity::updateEntity',
+    data: { color: 0xff0000, speed: 5 }
+  }]
+});
+
+// exports the sutra as json
+const json = sutra.toJSON();
+console.log(json);
+
+// exports the sutra as plain english
+const english = sutra.toEnglish();
+console.log(english);
+```
+
+This simple rule set will create a Sutra that changes the color of the Boss entity when it's health is low.
+
+
+## Running a Sutra with Data
+
+Now that we have crafted a suitable Sutra for detecting if the boss's health is low, we will need to send some data to the Sutra in order to run the behavioral tree logic. 
+
+For this example, we will create a simple array of entities:
+
+```js
+// create a simple array of entities
+let allEntities = [
+  { id: 1, type: 'BOSS', health: 100 },
+  { id: 2, type: 'PLAYER', health: 100 }
+];
+```
+
+Then we'll create a simple `gameTick()` function to iterate through our Entities array:
+
+```js
+// create a gameTick function for processing entities with sutra.tick()
+function gameTick () {
+  allEntities.forEach(entity => {
+    sutra.tick(entity);
+  });
+}
+```
+
+Now that we have a way to send data into our Sutra, we'll need to listen for events on the Sutra in order to know if any of our conditional actions have triggered.
+
+```js
+// listen for all events that the sutra instance emits
+sutra.onAny(function(ev, data, node){
+  // console.log('onAny', ev, data);
+})
+
+// listen for specific events that the sutra instance emits
+sutra.on('entity::updateEntity', function(entity, node){
+  // here we can write arbitrary code to handle the event
+  console.log('entity::updateEntity =>', JSON.stringify(entity, true, 2));
+  // In `mantra`, we simply call game.emit('entity::updateEntity', data);
+});
+```
+
+Now that we have defined our Sutra, defined data to send our Sutra, and have added event listeners to the Sutra. We can run our `gameTick()` function once with the Boss at full-health, then again with the Boss at low health.
+
+```js
+// run the game tick with Boss at full health
+// nothing should happen
+gameTick();
+
+// run the game tick with Boss at low health
+// `entity::updateEntity` event should be emitted
+allEntities[0].health = 40;
+gameTick();
+```
+
+Results in:
+
+```
+entity::updateEntity => {
+  id: 1,
+  type: 'BOSS',
+  health: 40,
+  color: 0xff0000,
+  speed: 5
+ }
+```
+
+It's that simple. This demonstrates a single-level conditional action using basic logic.
+
+## Composition and Nested Sutras
+
+In the previous example, we created a simple compositional if statement which used two conditions, `isBoss` and `isHealthLow`. Sutra supports conditional composition as well as deeply nested behavior trees.
+
+For example, our previous Sutra Action could be rewritten as:
+
+
+```js
+sutra.addAction({
+  if: 'isBoss',
+  then: [{
+    if: 'isHealthLow',
+    then: [{
+      action: 'entity::updateEntity',
+      data: { color: 0xff0000, speed: 5 } // Example with multiple properties
+    }]
+  }]
+});
+```
+
+It's also possible to create a compositional condition using a logic operator. The default logical operator always defaults to `and`.
+
+
+```js
+// Composite AND condition
+sutra.addCondition('isBossAndHealthLow', {
+  op: 'and', // and, or, not
+  conditions: ['isBoss', 'isHealthLow']
+});
+```
+
+## Global Game State Scope
+
+In many cases, your Sutra will need to reference a context outside of the Entity it's evaluating. For example, a global `gameData` object may have information about the boundary size of the map, or a global constant value such as `maxUnits` which is required as reference for a spawner.
+
+For Global Game State, `sutra.tick()` supports an additional context property as it's second argument. 
+
+
+```js
+const gameState = { isGameRunning: false };
+const allEntities = [
+  { id: 1, type: 'BOSS', health: 40 },
+  { id: 2, type: 'PLAYER', health: 100 }
+];
+
+sutra.addCondition('isGameRunning', (entity, gameState) => gameState.isGameRunning);
 sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
 sutra.addCondition('isHealthLow', {
   op: 'lessThan',
@@ -54,41 +213,52 @@ sutra.addCondition('isHealthLow', {
   value: 50
 });
 
-// Define an action
 sutra.addAction({
-  if: 'isBoss',
+  if: ['isGameRunning', 'isBoss', 'isHealthLow'],
   then: [{
-    if: 'isHealthLow',
-    then: [{ 
-      action: 'entity::update', 
-      data: { color: 0xff0000, speed: 5 }
-    }]
+    action: 'entity::updateEntity',
+    data: { speed: 5 }
   }]
 });
 
-// Event listener for the action
-sutra.on('entity::update', (entity, data) => {
-  // Here is where you would put your custom code
-  console.log(`Updated entity ${entity.id} with`, data);
+allEntities.forEach(entity => {
+  sutra.tick(entity, gameState);
 });
+// nothing happens, `isGameRunning` condition returns false
 
-// Example game entities
-let allEntities = [
-  { id: 1, type: 'BOSS', health: 100 },
-  { id: 2, type: 'PLAYER', health: 100 }
-];
+// update the global game state
+gameState.isGameRunning = true;
 
-// Game loop
-function gameTick() {
-  allEntities.forEach(entity => {
-    sutra.tick(entity);
-  });
+allEntities.forEach(entity => {
+  sutra.tick(entity, gameState);
+});
+// `entity::updateEntity` will be emitted
+```
+
+## Dynamic Action Values
+
+
+Some Sutras may require a dynamic value by function reference when evaluating triggered actions. For example, if you wanted to change the Boss's color to a random color instead of providing a static color.
+
+In this example, you will pass a function reference as a value, which will be dynamically executed upon each condition evaluation using the appropriate tree scope.
+
+```js
+// Function to generate a random color integer
+function generateRandomColorInt(entity, gameState, node) {
+  // entity is the entity scoped which is being evaluated
+  // gameState is the optional second argument to sutra.tick(entity, gameState)
+  // node is the reference to current Sutra Tree node element
+  return Math.floor(Math.random() * 255);
 }
 
-// Running the game tick
-gameTick(); // No action triggered
-allEntities[0].health = 30; // Boss health drops below 50
-gameTick(); // Action 'entity::update' is triggered
+sutra.addAction({
+  if: ['isBoss', 'isHealthLow'],
+  then: [{
+    action: 'entity::updateEntity',
+    data: { color: generateRandomColorInt, speed: 5 }
+  }]
+});
+
 ```
 
 
