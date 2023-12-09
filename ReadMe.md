@@ -219,11 +219,11 @@ levelSutra.addAction({
 });
 ```
 
-In this setup, `roundSutra` and `npcLogic` are defined separately with their specific conditions and actions. Then, they are integrated into the main `levelSutra``. The roundRunning condition in `levelSutra`` governs whether the npcLogic subtree should be executed.
+In this setup, `roundSutra` and `npcLogic` are defined separately with their specific conditions and actions. Then, they are integrated into the main `levelSutra`. The roundRunning condition in `levelSutra` governs whether the npcLogic subtree should be executed.
 
 ### Running Nested Sutras
 
-To run a nested Sutra, you call the tick method on the main Sutra with relevant `data` and `gameState``. The main Sutra evaluates its conditions and decides whether to invoke the actions or subtrees.
+To run a nested Sutra, you call the tick method on the main Sutra with relevant `data` and `gameState`. The main Sutra evaluates its conditions and decides whether to invoke the actions or subtrees.
 
 ```js
 levelSutra.tick({ type: 'UnitSpawner' }, { roundStarted: true, roundEnded: false });
