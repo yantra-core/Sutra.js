@@ -10,6 +10,7 @@ Sutra is a versatile library for creating and managing behavior trees in JavaScr
 
 - **Conditional Logic** - Simple `if`, `then`, `else` constructs to define trees
 - **Composite Conditions** - Composite conditional logic using `AND`, `OR`, `NOT`
+- **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
 - **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
 - **Action Control** - Define action objects with scoped parameters
 - **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
@@ -17,24 +18,6 @@ Sutra is a versatile library for creating and managing behavior trees in JavaScr
 - **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
 - **Human-readable Exports** - Support for exporting sutras to plain English
 - **Sutra JSON Format** - Import and Export tree definitions in `sutra.json` format
-
-## Conditional and Logic Operators
-
-Sutra supports a range of conditional and logic operators, enabling complex decision-making structures within behavior trees.
-
-| Operator               | Alias            | Description                                       | Example Usage                                          |
-|------------------------|------------------|---------------------------------------------------|--------------------------------------------------------|
-| `equals`               | `eq`, `==`       | True if a property equals a given value.          | `{ "op": "equals", "property": "type", "value": "BOSS" }` |
-| `notEquals`            | `neq`, `!=`      | True if a property does not equal a given value.  | `{ "op": "notEquals", "property": "type", "value": "BOSS" }` |
-| `lessThan`             | `lt`, `<`        | True if a property is less than a given value.    | `{ "op": "lessThan", "property": "health", "value": 50 }` |
-| `lessThanOrEqual`      | `lte`, `<=`      | True if a property is less than or equal to a value. | `{ "op": "lessThanOrEqual", "property": "health", "value": 50 }` |
-| `greaterThan`          | `gt`, `>`        | True if a property is greater than a given value. | `{ "op": "greaterThan", "property": "health", "value": 50 }` |
-| `greaterThanOrEqual`   | `gte`, `>=`      | True if a property is greater than or equal to a value. | `{ "op": "greaterThanOrEqual", "property": "health", "value": 50 }` |
-| `and`                  | `&&`, `and`      | True if all provided conditions are true.         | `{ "op": "and", "conditions": ["isBoss", "isHealthLow"] }` |
-| `or`                   | `||`, `or`       | True if any of the provided conditions are true.  | `{ "op": "or", "conditions": ["isBoss", "isPlayer"] }` |
-| `not`                  | `!`, `not`       | True if the provided condition is false.          | `{ "op": "not", "condition": "isBoss" }` |
-
-
 
 <p>
 Sutras can be exported to a human-readable format. If you don't prefer using code to define your Sutra we have a Visual Editor <a href="https://yantra.gg/mantra/examples/offline/sutra-level-editor">currently in development</a>.
@@ -160,7 +143,7 @@ entity::updateEntity => {
 
 It's that simple. This demonstrates a single-level conditional action using basic logic.
 
-## Composition and Nested Sutras
+## Composition and Nested Conditionals
 
 In the previous example, we created a simple compositional if statement which used two conditions, `isBoss` and `isHealthLow`. Sutra supports conditional composition as well as deeply nested behavior trees.
 
@@ -189,6 +172,61 @@ sutra.addCondition('isBossAndHealthLow', {
   op: 'and', // and, or, not
   conditions: ['isBoss', 'isHealthLow']
 });
+```
+
+## Using Nested Sutras with Subtrees
+
+Nested Sutras with subtrees provide a powerful way to organize complex behavior trees into modular, manageable sections. This feature allows you to create distinct Sutras for different aspects of your game logic and then integrate them into a main Sutra. Each subtree can have its own conditions and actions, which are executed within the context of the main Sutra.
+
+### Implementing Nested Sutras
+
+Consider a tower defense game where we need separate logic for round management and NPC actions. We can create two Sutras: `roundSutra` for round logic and `npcLogic` for NPC behavior.
+
+see: `./examples/nested-sutra.js`
+
+```javascript
+import Sutra from '@yantra-core/sutra';
+
+let roundSutra = new Sutra();
+roundSutra.addCondition('roundStarted', (entity, gameState) => gameState.roundStarted === true);
+roundSutra.addCondition('roundEnded', (entity, gameState) => gameState.roundEnded === true);
+roundSutra.addCondition('roundRunning', {
+  op: 'not',
+  conditions: ['roundEnded']
+});
+
+let npcLogic = new Sutra();
+npcLogic.addCondition('isSpawner', (entity) => entity.type === 'UnitSpawner');
+npcLogic.addAction({
+  if: 'isSpawner',
+  then: [{
+    action: 'spawnEnemy',
+    data: {
+      type: 'ENEMY',
+      position: { x: 100, y: 50 },
+      health: 100
+    }
+  }]
+});
+
+let levelSutra = new Sutra();
+levelSutra.use(roundSutra);
+levelSutra.use(npcLogic, 'npcLogic'); // optionally, identify the subtree with name
+levelSutra.addAction({
+  if: 'roundRunning',
+  subtree: 'npcLogic'
+});
+```
+
+In this setup, `roundSutra` and `npcLogic` are defined separately with their specific conditions and actions. Then, they are integrated into the main `levelSutra``. The roundRunning condition in `levelSutra`` governs whether the npcLogic subtree should be executed.
+
+### Running Nested Sutras
+
+To run a nested Sutra, you call the tick method on the main Sutra with relevant `data` and `gameState``. The main Sutra evaluates its conditions and decides whether to invoke the actions or subtrees.
+
+```js
+levelSutra.tick({ type: 'UnitSpawner' }, { roundStarted: true, roundEnded: false });
+
 ```
 
 ## Global Game State Scope
@@ -237,7 +275,6 @@ allEntities.forEach(entity => {
 
 ## Dynamic Action Values
 
-
 Some Sutras may require a dynamic value by function reference when evaluating triggered actions. For example, if you wanted to change the Boss's color to a random color instead of providing a static color.
 
 In this example, you will pass a function reference as a value, which will be dynamically executed upon each condition evaluation using the appropriate tree scope.
@@ -261,6 +298,21 @@ sutra.addAction({
 
 ```
 
+## Conditional and Logic Operators
+
+Sutra supports a range of conditional and logic operators, enabling complex decision-making structures within behavior trees.
+
+| Operator               | Alias            | Description                                       | Example Usage                                          |
+|------------------------|------------------|---------------------------------------------------|--------------------------------------------------------|
+| `equals`               | `eq`, `==`       | True if a property equals a given value.          | `{ "op": "equals", "property": "type", "value": "BOSS" }` |
+| `notEquals`            | `neq`, `!=`      | True if a property does not equal a given value.  | `{ "op": "notEquals", "property": "type", "value": "BOSS" }` |
+| `lessThan`             | `lt`, `<`        | True if a property is less than a given value.    | `{ "op": "lessThan", "property": "health", "value": 50 }` |
+| `lessThanOrEqual`      | `lte`, `<=`      | True if a property is less than or equal to a value. | `{ "op": "lessThanOrEqual", "property": "health", "value": 50 }` |
+| `greaterThan`          | `gt`, `>`        | True if a property is greater than a given value. | `{ "op": "greaterThan", "property": "health", "value": 50 }` |
+| `greaterThanOrEqual`   | `gte`, `>=`      | True if a property is greater than or equal to a value. | `{ "op": "greaterThanOrEqual", "property": "health", "value": 50 }` |
+| `and`                  | `&&`, `and`      | True if all provided conditions are true.         | `{ "op": "and", "conditions": ["isBoss", "isHealthLow"] }` |
+| `or`                   | `||`, `or`       | True if any of the provided conditions are true.  | `{ "op": "or", "conditions": ["isBoss", "isPlayer"] }` |
+| `not`                  | `!`, `not`       | True if the provided condition is false.          | `{ "op": "not", "condition": "isBoss" }` |
 
 ## Sutra Behavior Tree JSON Protocol Specification (RFC)
 
