@@ -1,5 +1,5 @@
 import tap from 'tape';
-import Sutra from '../lib/Sutra.js';
+import Sutra from '../lib/sutra.js';
 
 tap.test('Extended SutraPath Node Remove Nested Tests', async (t) => {
   let sutra = new Sutra();

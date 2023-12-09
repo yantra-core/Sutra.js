@@ -2,6 +2,7 @@
 
 ![sutra](https://github.com/yantra-core/sutra/assets/70011/5a257357-3d50-4215-a564-8f3955fc3e83)
 
+![Build Status](https://github.com/yantra-core/sutra/actions/workflows/nodejs.yml/badge.svg)
 
 ## JavaScript Behavior Tree Library
 Sutra is a versatile library for creating and managing behavior trees in JavaScript. It allows for easy definition of complex behavior patterns using a simple and intuitive syntax.

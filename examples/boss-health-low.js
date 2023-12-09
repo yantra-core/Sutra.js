@@ -1,5 +1,5 @@
 
-import Sutra from '../lib/Sutra.js';
+import Sutra from '../lib/sutra.js';
 
 // creates a new sutra instance
 const sutra = new Sutra();
