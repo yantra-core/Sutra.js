@@ -35,7 +35,6 @@ let level = new Sutra();
 
 level.use(round, 'roundLogic');
 level.use(npcLogic, 'npcLogic');
-//level.use(npcLogic, 'npcLogic');
 
 level.addAction({
   if: 'roundRunning',
@@ -50,3 +49,6 @@ level.tick({
 }, { roundStarted: false, roundEnded: false });
 
 console.log("level.tree", level.tree)
+
+
+console.log(level.toEnglish())
