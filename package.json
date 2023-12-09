@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "tap ./test/*.js"
+    "test": "tap --coverage-report=lcov --allow-incomplete-coverage test/",
+    "cover": "tap --coverage-report=html test/"
   },
   "repository": {
     "type": "git",
