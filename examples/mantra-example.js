@@ -62,18 +62,18 @@ function testRules(game) {
     //game.emit('entity::createEntity', entity);
   });
 
+  // check if entities has timers and timer with name 'test-timer' is completed
+  // TODO: remove this, should iterate and know timer names
+  // set time done to false on origin timer
+
   rules.addCondition('timerCompleted', entity => {
-    // check if entities has timers and timer with name 'test-timer' is completed
     let timerDone = false;
-    // TODO: remove this, should iterate and know timer names
+    // TODO: clean Timers API up with game.getTimer('test-timer').done
     if (entity.timers && entity.timers.timers && entity.timers.timers['test-timer'] && entity.timers.timers['test-timer'].done) {
       timerDone = true;
-      // set time done to false on origin timer
       entity.timers.timers['test-timer'].done = false;
     }
-
     return timerDone;
-    //return entity.timerDone;
   });
 
   rules.addCondition('blockCountBetween5and10', [
