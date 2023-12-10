@@ -59,17 +59,11 @@ tap.test('Boss fight behavior tree test', async (t) => {
     return Math.floor(Math.random() * 255);
   }
 
-  sutra.addAction({
-    if: 'isBoss',
-    then: [{
-      if: 'isHealthLow',
-      then: [{
-        action: 'entity::update',
-        data: { color: generateRandomColorInt, speed: 5 } // Example with multiple properties
-      }]
-    }]
-  });
-
+  sutra
+    .if('isBoss')
+    .if('isHealthLow')
+    .then('entity::update', { color: generateRandomColorInt, speed: 5 })
+  
   function gameTick() {
     allEntities.forEach(entity => {
       sutra.tick(entity, gameState);
@@ -102,8 +96,6 @@ tap.test('Boss fight behavior tree test', async (t) => {
   gameState.ents.BLOCK.push({});
   gameTick();
   t.equal(blockCountEquals0Detected, false, 'BLOCK count not equals 0 should be detected');
-
-
 
   // Resetting for next test
   bossHealthLowDetected = false;

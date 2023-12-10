@@ -36,9 +36,11 @@ if isBoss
       speed: 5
 ```
 
-It's clear to read that this Sutra will be responsible for changing the color and speed of `isBoss` when `isHealthLow`.
+This Sutra will be responsible for changing the color and speed of `isBoss` when `isHealthLow`.
 
 ### How
+
+The following code will create a Sutra that changes the color of the Boss entity when it's health is low.
 
 ```js
 import Sutra from '@yantra-core/sutra';
@@ -73,8 +75,16 @@ const english = sutra.toEnglish();
 console.log(english);
 ```
 
-This simple rule set will create a Sutra that changes the color of the Boss entity when it's health is low.
+### Fluent API Usage
 
+The previous `sutra.addAction()` call could also be expressed using a Fluent API Syntax to help reduce code footprint.
+
+```js
+sutra
+  .if('isBoss')
+  .if('isHealthLow')
+  .then('entity::updateEntity', { color: 0xff0000, speed: 5 });
+```
 
 ## Running a Sutra with Data
 
