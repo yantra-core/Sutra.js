@@ -31,6 +31,10 @@ sutra
   .if('isHealthLow')
   .then('entity::updateEntity', { color: 0xff0000, speed: 5 })
   .then('entity::createEntity', { color: 0x00ff00, speed: 1 })
+  .else('entity::updateEntity', { color: 0x0000ff, speed: 10 });
+
+
+
 
 // exports the sutra as json
 const json = sutra.toJSON();
