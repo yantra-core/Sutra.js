@@ -1,5 +1,5 @@
 import Sutra from '../lib/sutra.js';
-
+// import fs from 'fs';
 // creates a new sutra instance
 const sutra = new Sutra();
 
@@ -13,21 +13,9 @@ sutra.addCondition('isHealthLow', {
   value: 50
 });
 
-/*
-sutra.addAction({
-  if: ['isBoss', 'isHealthLow'],
-  then: [{
-    action: 'entity::updateEntity',
-    data: { color: 0xff0000, speed: 5 }
-  }]
-});
-*/
-
-/*
 sutra.if('isBoss', 'isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
 
 sutra.if('isBoss').if('isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-*/
 
 /*
 sutra
@@ -37,6 +25,13 @@ sutra
   .then('entity::createEntity', { color: 0x00ff00, speed: 1 })
   .else('entity::updateEntity', { color: 0x0000ff, speed: 10 });
 */
+
+
+sutra
+  .if('roundStarted')
+  .if('roundNotRunning')
+  .then('spawnEnemyUnits')
+  .then('startRound')
 
 
 // this is how we currently do it
@@ -59,6 +54,8 @@ sutra.addAction({
 sutra.if('isBoss').if('isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
 sutra.if('isBoss', 'isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
 
+
+
 sutra
   .if('blockHitPlayer')
   .then((rules) => {
@@ -66,7 +63,13 @@ sutra
       .if('blockIsRed')
       .then('damagePlayer')
       .else('healPlayer');
-    })
+  })
+  .then('removeBlock');
+
+
+  sutra
+  .if('blockHitWall')
+  .then('damageWall')
   .then('removeBlock');
 
 
@@ -77,3 +80,6 @@ console.log(json);
 // exports the sutra as plain english
 const english = sutra.toEnglish();
 console.log(english);
+
+// write the english to test.txt file
+// fs.writeFileSync('test.txt', english);

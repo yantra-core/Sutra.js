@@ -38,6 +38,13 @@ tap('Sutra Behavior Tree Tests', (t) => {
   // Reset actionsTriggered before each test
   actionsTriggered = [];
 
+  // Test sutraPath for each node
+  t.equal(rules.tree[0].sutraPath, 'tree[0]', "sutraPath for first node should be 'tree[0]'");
+  t.equal(rules.tree[0].then[0].sutraPath, 'tree[0].then[0]', "sutraPath for nested then node should be 'tree[0].then[0]'");
+  t.equal(rules.tree[0].then[0].then[0].sutraPath, 'tree[0].then[0].then[0]', "sutraPath for nested damagePlayer action should be 'tree[0].then[0].then[0]'");
+  t.equal(rules.tree[0].then[0].else[0].sutraPath, 'tree[0].then[0].else[0]', "sutraPath for nested healPlayer action should be 'tree[0].then[0].else[0]'");
+
+
   // Test case when block is red
   rules.tick(playerBlockCollision);
   t.deepEqual(actionsTriggered, ['damagePlayer', 'removeBlock'], "Should damage player and remove block if block is red");

@@ -35,6 +35,12 @@ rules.on('damagePlayer', () => actionsTriggered.push('damagePlayer'));
 rules.on('removeBlock', () => actionsTriggered.push('removeBlock'));
 rules.on('healPlayer', () => actionsTriggered.push('healPlayer')); // New action
 
+tap('Sutra Behavior Tree sutraPath Tests', (t) => {
+  t.equal(rules.tree[0].sutraPath, 'tree[0]', "sutraPath for first node should be 'tree[0]'");
+  t.equal(rules.tree[0].then[0].sutraPath, 'tree[0].then[0]', "sutraPath for nested node should be 'tree[0].then[0]'");
+  t.end();
+});
+
 tap('Sutra Behavior Tree Tests', (t) => {
   // Reset actionsTriggered before each test
   actionsTriggered = [];

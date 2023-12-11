@@ -244,6 +244,6 @@ function testRules(game) {
 }
 
 let rules = testRules({});
-console.log(rules)
+console.log(rules.toJSON())
 
 console.log(rules.exportToEnglish());
