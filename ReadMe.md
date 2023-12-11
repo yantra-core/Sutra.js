@@ -24,6 +24,8 @@ Sutra is a versatile library for creating and managing behavior trees in JavaScr
 Sutras can be exported to a human-readable format. If you don't prefer using code to define your Sutra we have a Visual Editor <a href="https://yantra.gg/mantra/examples/offline/sutra-level-editor">currently in development</a>.
 </p>
 
+`./examples` folder for easy to understand examples
+
 ### Crafting Sutras
 
 Here we have the human read-able *exported* Sutra definition that we will get at the end:
