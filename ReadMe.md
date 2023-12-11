@@ -31,12 +31,19 @@ Here we have the human read-able *exported* Sutra definition that we will get at
 ```md
 if isBoss
   if isHealthLow
-    entity::updateEntity
+    updateEntity
       color: 0xff0000
       speed: 5
 ```
 
-This Sutra will be responsible for changing the color and speed of `isBoss` when `isHealthLow`.
+Written as Javascript, this Sutra will be responsible for changing the color and speed of `isBoss` when `isHealthLow`.
+
+```js
+sutra
+  .if('isBoss')
+  .if('isHealthLow')
+  .then('updateEntity', { color: 0xff0000, speed: 5 });
+```
 
 ### How
 
@@ -58,13 +65,10 @@ sutra.addCondition('isHealthLow', {
   value: 50
 });
 
-sutra.addAction({
-  if: ['isBoss', 'isHealthLow'],
-  then: [{
-    action: 'entity::updateEntity',
-    data: { color: 0xff0000, speed: 5 }
-  }]
-});
+sutra
+  .if('isBoss')
+  .if('isHealthLow')
+  .then('updateEntity', { color: 0xff0000, speed: 5 });
 
 // exports the sutra as json
 const json = sutra.toJSON();
@@ -75,16 +79,7 @@ const english = sutra.toEnglish();
 console.log(english);
 ```
 
-### Fluent API Usage
-
-The previous `sutra.addAction()` call could also be expressed using a Fluent API Syntax to help reduce code footprint.
-
-```js
-sutra
-  .if('isBoss')
-  .if('isHealthLow')
-  .then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-```
+*Remark: The fluent chaining APIs are optional. Keep reading*
 
 ## Running a Sutra with Data
 
@@ -120,10 +115,10 @@ sutra.onAny(function(ev, data, node){
 })
 
 // listen for specific events that the sutra instance emits
-sutra.on('entity::updateEntity', function(entity, node){
+sutra.on('updateEntity', function(entity, node){
   // here we can write arbitrary code to handle the event
-  console.log('entity::updateEntity =>', JSON.stringify(entity, true, 2));
-  // In `mantra`, we simply call game.emit('entity::updateEntity', data);
+  console.log('updateEntity =>', JSON.stringify(entity, true, 2));
+  // In `mantra`, we simply call game.emit('updateEntity', data);
 });
 ```
 
@@ -135,7 +130,7 @@ Now that we have defined our Sutra, defined data to send our Sutra, and have add
 gameTick();
 
 // run the game tick with Boss at low health
-// `entity::updateEntity` event should be emitted
+// `updateEntity` event should be emitted
 allEntities[0].health = 40;
 gameTick();
 ```
@@ -143,7 +138,7 @@ gameTick();
 Results in:
 
 ```
-entity::updateEntity => {
+updateEntity => {
   id: 1,
   type: 'BOSS',
   health: 40,
@@ -154,12 +149,24 @@ entity::updateEntity => {
 
 It's that simple. This demonstrates a single-level conditional action using basic logic.
 
-## Composition and Nested Conditionals
+## Composition
 
-In the previous example, we created a simple compositional if statement which used two conditions, `isBoss` and `isHealthLow`. Sutra supports conditional composition as well as deeply nested behavior trees.
+In the first example, we created a simple compositional if statement which used two conditions, `isBoss` and `isHealthLow`. Sutra supports conditional composition as well as deeply nested behavior trees. All of the following Sutras will yield the same results.
 
-For example, our previous Sutra Action could be rewritten as:
+### Fluent Composition with Scoped Actions
 
+```js
+sutra
+  .if('isBoss')
+  .then((rules) => {
+    rules
+      .if('isHealthLow')
+      .then('updateEntity', { color: 0xff0000, speed: 5 });
+  })
+
+```
+
+### Nested
 
 ```js
 sutra.addAction({
@@ -167,12 +174,33 @@ sutra.addAction({
   then: [{
     if: 'isHealthLow',
     then: [{
-      action: 'entity::updateEntity',
+      action: 'updateEntity',
       data: { color: 0xff0000, speed: 5 } // Example with multiple properties
     }]
   }]
 });
 ```
+
+### Flat
+
+```js
+sutra.addAction({
+  if: ['isBoss', 'isHealthLow'],
+  then: [{
+    action: 'updateEntity',
+    data: { color: 0xff0000, speed: 5 }
+  }]
+});
+```
+### Flat Fluent
+
+```js
+sutra
+  .if('isBoss', 'isHealthLow')
+  .then('updateEntity', { color: 0xff0000, speed: 5 })
+```
+
+## Compositional Conditions
 
 It's also possible to create a compositional condition using a logic operator. The default logical operator always defaults to `and`.
 
@@ -265,7 +293,7 @@ sutra.addCondition('isHealthLow', {
 sutra.addAction({
   if: ['isGameRunning', 'isBoss', 'isHealthLow'],
   then: [{
-    action: 'entity::updateEntity',
+    action: 'updateEntity',
     data: { speed: 5 }
   }]
 });
@@ -281,7 +309,7 @@ gameState.isGameRunning = true;
 allEntities.forEach(entity => {
   sutra.tick(entity, gameState);
 });
-// `entity::updateEntity` will be emitted
+// `updateEntity` will be emitted
 ```
 
 ## Dynamic Action Values
@@ -302,7 +330,7 @@ function generateRandomColorInt(entity, gameState, node) {
 sutra.addAction({
   if: ['isBoss', 'isHealthLow'],
   then: [{
-    action: 'entity::updateEntity',
+    action: 'updateEntity',
     data: { color: generateRandomColorInt, speed: 5 }
   }]
 });
