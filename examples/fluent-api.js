@@ -54,17 +54,24 @@ sutra.addAction({
 sutra.if('isBoss').if('isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
 sutra.if('isBoss', 'isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
 
-
+sutra.addAction({
+  if: 'isBoss',
+  then: [{
+    if: 'isHealthLow',
+    then: [{
+      action: 'entity::updateEntity',
+      data: { color: 0xff0000, speed: 5 } // Example with multiple properties
+    }]
+  }]
+});
 
 sutra
-  .if('blockHitPlayer')
+  .if('isBoss')
   .then((rules) => {
     rules
-      .if('blockIsRed')
-      .then('damagePlayer')
-      .else('healPlayer');
+      .if('isHealthLow')
+      .then('entity::updateEntity', { color: 0xff0000, speed: 5 });
   })
-  .then('removeBlock');
 
 
   sutra
