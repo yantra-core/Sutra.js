@@ -14,6 +14,7 @@ Sutra is a versatile library for creating and managing behavior trees in JavaScr
 - **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
 - **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
 - **Action Control** - Define action objects with scoped parameters
+- **Data Transformation with `.map()`** - Transform context data within the tree using custom mapping functions
 - **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
 - **Tree Querying** - Query and manipulate the tree using intuitive string selectors
 - **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
@@ -272,7 +273,7 @@ levelSutra.tick({ type: 'UnitSpawner' }, { roundStarted: true, roundEnded: false
 
 ## Global Game State Scope
 
-In many cases, your Sutra will need to reference a context outside of the Entity it's evaluating. For example, a global `gameData` object may have information about the boundary size of the map, or a global constant value such as `maxUnits` which is required as reference for a spawner.
+In many cases, your Sutra will need to reference a context outside of the Entity it's evaluating. For example, a global `gameData` object may have information about the boundary size of the level, or a global constant value such as `maxUnits` which is required as reference for a spawner.
 
 For Global Game State, `sutra.tick()` supports an additional context property as it's second argument. 
 
@@ -313,6 +314,27 @@ allEntities.forEach(entity => {
 });
 // `updateEntity` will be emitted
 ```
+
+## Using `.map()` to Transform Data
+
+The `.map()` method allows you to transform context data dynamically within your behavior tree. This is particularly useful for modifying or enriching data based on complex logic or external factors.
+
+```js
+sutra.addMap('transformData', (context) => {
+  // Custom logic to transform the context data
+  context.customProp = 'hello world';
+});
+
+sutra
+  .if('someCondition')
+  .then((rules) => {
+    rules
+      .map('transformData')
+      .if('anotherCondition')
+      .then('someAction');
+  });
+```
+In this example, `transformData` is a mapping function that alters the context by adding `customProp`. This transformed context is then used in the subsequent conditions and actions.
 
 ## Dynamic Action Values
 
