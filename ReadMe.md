@@ -7,25 +7,9 @@
 ## JavaScript Behavior Tree Library
 Sutra is a versatile library for creating and managing behavior trees in JavaScript. It allows for easy definition of complex behavior patterns using a simple and intuitive syntax.
 
-## Features
+Sutra is an ideal tool for JavaScript game development. Using Sutra will significantly streamline your game logic, allowing you to focus on creating a tapestry of complex game behaviors in seconds.
 
-- **Conditional Logic** - Simple `if`, `then`, `else` constructs to define trees
-- **Composite Conditions** - Composite conditional logic using `AND`, `OR`, `NOT`
-- **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
-- **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
-- **Action Control** - Define action objects with scoped parameters
-- **Data Transformation with `.map()`** - Transform context data within the tree using custom mapping functions
-- **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
-- **Tree Querying** - Query and manipulate the tree using intuitive string selectors
-- **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
-- **Human-readable Exports** - Support for exporting sutras to plain English
-- **Sutra JSON Format** - Import and Export tree definitions in `sutra.json` format
-
-<p>
-Sutras can be exported to a human-readable format. If you don't prefer using code to define your Sutra we have a Visual Editor <a href="https://yantra.gg/mantra/examples/offline/sutra-level-editor">currently in development</a>.
-</p>
-
-`./examples` folder for easy to understand examples
+Sutras can be exported to a human-readable format ( with `i18n` support ). It is easy to read your Sutra in plain English and then modify it using the fluent API.
 
 ### Crafting Sutras
 
@@ -47,6 +31,30 @@ sutra
   .if('isHealthLow')
   .then('updateEntity', { color: 0xff0000, speed: 5 });
 ```
+
+<a href="#features">Full Feature List</a>
+
+## Live Demos
+
+### Stand-alone Sutra Example
+
+**Moves CSS Dot based on WASD Keyboard Inputs**
+
+[Try Demo On Yantra](https://yantra.gg/sutra/) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/pen/GRzLBmV)
+
+https://github.com/yantra-core/sutra/assets/70011/12e2a64a-1be4-42c5-9e0a-c97c0caba081
+
+## Full Game Level Designed in Sutra and <a href="github.com/yantra-core/mantra">Mantra</a>
+
+**Tower Defense Type Game**
+
+[Try Demo On Yantra](https://yantra.gg/mantra/examples/offline/sutra-level-editor) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/pen/KKJbeva) 
+
+https://github.com/yantra-core/sutra/assets/70011/edd4d09a-f48b-431e-bf5b-377ad60e3c49
+
+### More Examples
+
+Explore the `./examples` folder for additional examples
 
 ### How
 
@@ -184,6 +192,14 @@ sutra.addAction({
 });
 ```
 
+### Flat Fluent
+
+```js
+sutra
+  .if('isBoss', 'isHealthLow')
+  .then('updateEntity', { color: 0xff0000, speed: 5 })
+```
+
 ### Flat
 
 ```js
@@ -194,13 +210,6 @@ sutra.addAction({
     data: { color: 0xff0000, speed: 5 }
   }]
 });
-```
-### Flat Fluent
-
-```js
-sutra
-  .if('isBoss', 'isHealthLow')
-  .then('updateEntity', { color: 0xff0000, speed: 5 })
 ```
 
 ## Compositional Conditions
@@ -360,6 +369,25 @@ sutra.addAction({
 });
 
 ```
+
+<a name="features"></a>
+
+## Features
+
+- **Conditional Logic** - Simple `if`, `then`, `else` constructs to define trees
+- **Composite Conditions** - Composite conditional logic using `AND`, `OR`, `NOT`
+- **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
+- **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
+- **Action Control** - Define action objects with scoped parameters
+- **Data Transformation with `.map()`** - Transform context data within the tree using custom mapping functions
+- **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
+- **Tree Querying** - Query and manipulate the tree using intuitive string selectors
+- **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
+- **Human-readable Exports** - Support for exporting sutras to plain English
+- **Sutra JSON Format** - Import and Export tree definitions in `sutra.json` format
+
+*Browser package is `23kb` with zero dependencies*
+
 
 ## Conditional and Logic Operators
 
