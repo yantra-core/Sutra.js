@@ -1,7 +1,8 @@
 import Sutra from './lib/sutra.js';
-let sutra = {};
-sutra.Sutra = Sutra;
-sutra.createSutra = function () {
+function createSutra () {
   return new Sutra();
+}
+export {
+  Sutra,
+  createSutra
 };
-export default sutra;
