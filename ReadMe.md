@@ -14,8 +14,8 @@ Sutras can be exported to a human-readable format ( with `i18n` support ). It is
 **Release 1.8.0**
 | Files          | CDN                                         | Size |
 |---------------|--------------------------------------------------|-----------|
-| [sutra.js](https://github.com/yantra-core/sutra/blob/master/dist/sutra.js)      | [Link](https://yantra.gg/sutra.js)        | 55kb      |
-| [sutra.min.js](https://github.com/yantra-core/sutra/blob/master/dist/sutra.min.js)  | [Link](https://yantra.gg/sutra.min.js)    | 23kb      |
+| sutra.js    | [Link](https://yantra.gg/sutra.js)        | 55kb      |
+| sutra.min.js| [Link](https://yantra.gg/sutra.min.js)    | 23kb      |
 
 
 ### Crafting Sutras
