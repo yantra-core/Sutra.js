@@ -44,7 +44,7 @@ sutra
 
 https://github.com/yantra-core/sutra/assets/70011/12e2a64a-1be4-42c5-9e0a-c97c0caba081
 
-## Full Game Level Designed in Sutra and <a href="github.com/yantra-core/mantra">Mantra</a>
+## Full Game Level Designed in Sutra and <a href="https://github.com/yantra-core/mantra">Mantra</a>
 
 **Tower Defense Type Game**
 
