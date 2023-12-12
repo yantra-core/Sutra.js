@@ -11,6 +11,13 @@ Sutra is an ideal tool for JavaScript game development. Using Sutra will signifi
 
 Sutras can be exported to a human-readable format ( with `i18n` support ). It is easy to read your Sutra in plain English and then modify it using the fluent API.
 
+**Release 1.8.0**
+| Files          | CDN                                         | Size |
+|---------------|--------------------------------------------------|-----------|
+| [sutra.js](https://github.com/yantra-core/sutra/blob/master/dist/sutra.js)      | [Link](https://yantra.gg/sutra.js)        | 55kb      |
+| [sutra.min.js](https://github.com/yantra-core/sutra/blob/master/dist/sutra.min.js)  | [Link](https://yantra.gg/sutra.min.js)    | 23kb      |
+
+
 ### Crafting Sutras
 
 Here we have the human read-able *exported* Sutra definition that we will get at the end:
