@@ -9,25 +9,18 @@ tap.test('Sutra .use() method and subSutra functionality - single not condition 
   // Define round-related conditions
   round.addCondition('roundStarted', (entity, gameState) => gameState.roundStarted === true);
   round.addCondition('roundEnded', (entity, gameState) => gameState.roundEnded === true);
-  round.addCondition('roundRunning', {
-    op: 'not',
-    conditions: ['roundEnded']
-  });
+  round.addCondition('roundRunning', (entity, gameState) =>  gameState.roundRunning === true );
   
   let npcLogic = new Sutra();
   npcLogic.addCondition('isSpawner', (entity) => entity.type === 'UnitSpawner');
-  npcLogic.addAction({
-    if: ['isSpawner'],
-    then: [{
-      action: 'spawnEnemy',
-      data: {
-        // Data relevant to spawning the enemy
-        type: 'ENEMY',
-        position: { x: 100, y: 50 },
-        health: 100
-      }
-    }]
-  });
+  
+  npcLogic
+    .if('isSpawner')
+    .then('spawnEnemy', {
+      type: 'ENEMY',
+      position: { x: 100, y: 50 },
+      health: 100
+    });
   
   npcLogic.on('spawnEnemy', (data, node, gameState) => {
     console.log('Spawning enemy:', data);
@@ -41,25 +34,35 @@ tap.test('Sutra .use() method and subSutra functionality - single not condition 
   level.use(npcLogic, 'npcLogic'); // optionally specify a name for the subtree to reference it later
   //level.use(npcLogic, 'npcLogic');
   
+  level
+    .if('roundRunning')
+    .if('roundStarted')
+    .then('npcLogic');
+
+  /*
   level.addAction({
     if: 'roundRunning',
     subtree: 'npcLogic'
   });
+  */
   
   let actionTriggered = false;
   npcLogic.on('spawnEnemy', () => {
+    console.log('spawnEnemy action triggered')
     actionTriggered = true;
   });
 
+  console.log(level.tree)
   level.tick({
     type: 'UnitSpawner'
     // ... other data ...
-  }, { roundStarted: false, roundEnded: false });
+  }, { roundStarted: true, roundEnded: false, roundRunning: true });
 
   t.equal(actionTriggered, true, 'spawnEnemy action should be triggered when round is not running');
   t.end();
 
 });
+
 
 
 tap.test('Sutra .use() method and subSutra functionality - single not condition - false', async (t) => {
@@ -69,25 +72,18 @@ tap.test('Sutra .use() method and subSutra functionality - single not condition 
   // Define round-related conditions
   round.addCondition('roundStarted', (entity, gameState) => gameState.roundStarted === true);
   round.addCondition('roundEnded', (entity, gameState) => gameState.roundEnded === true);
-  round.addCondition('roundRunning', {
-    op: 'not',
-    conditions: ['roundEnded']
-  });
+  round.addCondition('roundRunning', (entity, gameState) =>  gameState.roundRunning === true );
   
   let npcLogic = new Sutra();
   npcLogic.addCondition('isSpawner', (entity) => entity.type === 'UnitSpawner');
-  npcLogic.addAction({
-    if: ['isSpawner'],
-    then: [{
-      action: 'spawnEnemy',
-      data: {
-        // Data relevant to spawning the enemy
-        type: 'ENEMY',
-        position: { x: 100, y: 50 },
-        health: 100
-      }
-    }]
-  });
+  
+  npcLogic
+    .if('isSpawner')
+    .then('spawnEnemy', {
+      type: 'ENEMY',
+      position: { x: 100, y: 50 },
+      health: 100
+    });
   
   npcLogic.on('spawnEnemy', (data, node, gameState) => {
     console.log('Spawning enemy:', data);
@@ -97,26 +93,37 @@ tap.test('Sutra .use() method and subSutra functionality - single not condition 
   
   let level = new Sutra();
   
-  level.use(round, 'roundLogic');
-  level.use(npcLogic, 'npcLogic');
+  level.use(round);
+  level.use(npcLogic, 'npcLogic'); // optionally specify a name for the subtree to reference it later
   //level.use(npcLogic, 'npcLogic');
   
+  // doesnt work
+  level
+    .if('roundRunning')
+    .if('roundStarted')
+    .then('npcLogic');
+  
+  /*
+  // works
   level.addAction({
     if: 'roundRunning',
     subtree: 'npcLogic'
   });
+  */
   
   let actionTriggered = false;
   npcLogic.on('spawnEnemy', () => {
+    console.log('spawnEnemy action triggered')
     actionTriggered = true;
   });
 
+  console.log(level.toJSON())
   level.tick({
     type: 'UnitSpawner'
-    // ... other data ...
-  }, { roundStarted: false, roundEnded: true });
+  }, { roundStarted: false, roundEnded: false, roundRunning: false });
 
   t.equal(actionTriggered, false, 'spawnEnemy action should be triggered when round is not running');
   t.end();
 
 });
+
