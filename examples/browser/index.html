@@ -14,8 +14,8 @@
     #humanOutput {
       /* place in center of screen */
       position: absolute;
-      top: 100px;
-      right: 80px;
+      top: 20px;
+      right: 10px;
       font-family: Arial, sans-serif;
       font-size: 32px;
     }
@@ -99,10 +99,10 @@
       });
 
       // Define actions
-      inputSutra.if('pressW').then('moveForward', { x: 0, y: -moveSpeed });
-      inputSutra.if('pressA').then('moveLeft', { x: -moveSpeed, y: 0 });
-      inputSutra.if('pressS').then('moveBackward', { x: 0, y: moveSpeed });
-      inputSutra.if('pressD').then('moveRight', { x: moveSpeed, y: 0 });
+      inputSutra.if('pressW').then('moveForward')
+      inputSutra.if('pressA').then('moveLeft');
+      inputSutra.if('pressS').then('moveBackward');
+      inputSutra.if('pressD').then('moveRight');
 
       // Sutra event listeners for executing actions
       inputSutra.on('moveForward', (entity) => {
