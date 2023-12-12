@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sutra Input Movement Example</title>
+  <script src="./sutra.js"></script>
+  <style>
+    #output {
+      font-family: Arial, sans-serif;
+      margin-top: 20px;
+    }
+    #humanOutput {
+      /* place in center of screen */
+      position: absolute;
+      top: 100px;
+      right: 80px;
+      font-family: Arial, sans-serif;
+      font-size: 32px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Sutra Input Movement Example</h1>
+  <h2>Press WASD Keys to Move Red Dot</h2>
+  <div id="output"></div>
+  <pre><code id="humanOutput"></code></pre>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const moveSpeed = 400;
+      const forceFactor = 0.05;
+      let inputMap = ['W', 'A', 'S', 'D'];
+
+      let cssDot = createCssDot(1); // Create CSS dot
+      let game = createGameMock(cssDot); // Create Game Mock
+      let inputSutra = initializeSutra(game, inputMap, moveSpeed); // Initialize Sutra
+    
+      // update human readable output
+      let humanOutput = document.getElementById('humanOutput');
+      humanOutput.innerHTML = inputSutra.toEnglish();
+
+      document.addEventListener('keydown', (event) => handleKeyDown(event, inputSutra, inputMap));
+      document.addEventListener('keyup', (event) => handleKeyUp(event, inputSutra, inputMap));
+    });
+
+    function createCssDot(entityId) {
+      let cssDot = document.createElement('div');
+      cssDot.id = `cssDot${entityId}`;
+      cssDot.style.position = 'absolute';
+      cssDot.style.width = '50px';
+      cssDot.style.height = '50px';
+      cssDot.style.backgroundColor = 'red';
+      cssDot.style.borderRadius = '50%';
+      cssDot.style.left = `${window.innerWidth / 2}px`;
+      cssDot.style.top = `${window.innerHeight / 2}px`;
+      document.body.appendChild(cssDot);
+      return cssDot;
+    }
+
+    function createGameMock(cssDot) {
+      return {
+        applyForce: function (entityId, force) {
+          let currentX = parseInt(cssDot.style.left);
+          let currentY = parseInt(cssDot.style.top);
+          cssDot.style.left = `${currentX + force.x}px`;
+          cssDot.style.top = `${currentY + force.y}px`;
+
+          logOutput(`Applying force to ${entityId}: ${JSON.stringify(force)}`);
+
+        }
+      };
+    }
+
+    function logOutput(message) {
+      let output = document.getElementById('output');
+
+      // get current child count of output div
+      let childCount = output.children.length;
+
+      // if there are more than 10 children, remove the first one
+      if (childCount > 20) {
+        output.removeChild(output.children[0]);
+      }
+
+      let newElement = document.createElement('div');
+      newElement.textContent = message;
+      output.appendChild(newElement);
+    }
+
+    function initializeSutra(game, inputMap, moveSpeed) {
+      let inputSutra = SUTRA.createSutra();
+      inputMap.forEach((key) => {
+        inputSutra.addCondition(`press${key}`, (data, gameState) => {
+          return gameState.input && gameState.input.controls[key];
+        });
+      });
+
+      // Define actions
+      inputSutra.if('pressW').then('moveForward', { x: 0, y: -moveSpeed });
+      inputSutra.if('pressA').then('moveLeft', { x: -moveSpeed, y: 0 });
+      inputSutra.if('pressS').then('moveBackward', { x: 0, y: moveSpeed });
+      inputSutra.if('pressD').then('moveRight', { x: moveSpeed, y: 0 });
+
+      // Sutra event listeners for executing actions
+      inputSutra.on('moveForward', (entity) => {
+        let dx = 0;
+        let dy = moveSpeed;
+        const forceFactor = 0.05;
+        const force = { x: dx * forceFactor, y: -dy * forceFactor };
+        game.applyForce(entity.id, force);
+      });
+
+      inputSutra.on('moveLeft', (entity) => {
+        let dx = moveSpeed;
+        let dy = 0;
+        const forceFactor = 0.05;
+        const force = { x: -dx * forceFactor, y: dy * forceFactor };
+        game.applyForce(entity.id, force);
+      });
+
+      inputSutra.on('moveRight', (entity) => {
+        let dx = moveSpeed;
+        let dy = 0;
+        const forceFactor = 0.05;
+        const force = { x: dx * forceFactor, y: dy * forceFactor };
+        game.applyForce(entity.id, force);
+      });
+
+      inputSutra.on('moveBackward', (entity) => {
+        let dx = 0;
+        let dy = moveSpeed;
+        const forceFactor = 0.05;
+        const force = { x: dx * forceFactor, y: dy * forceFactor };
+        game.applyForce(entity.id, force);
+      });
+
+      return inputSutra;
+
+    }
+
+    function handleKeyDown(event, inputSutra, inputMap) {
+      if (inputMap.includes(event.key.toUpperCase())) {
+        let gameState = { input: { controls: { [event.key.toUpperCase()]: true } } };
+        inputSutra.tick({ id: 'cssDot' }, gameState);
+      }
+    }
+
+    function handleKeyUp(event, inputSutra, inputMap) {
+      if (inputMap.includes(event.key.toUpperCase())) {
+        let gameState = { input: { controls: { [event.key.toUpperCase()]: false } } };
+        inputSutra.tick({ id: 'cssDot' }, gameState);
+      }
+    }
+  </script>
+</body>
+
+</html>
