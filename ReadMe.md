@@ -61,7 +61,7 @@ Explore the `./examples` folder for additional examples
 The following code will create a Sutra that changes the color of the Boss entity when it's health is low.
 
 ```js
-import Sutra from '@yantra-core/sutra';
+import { Sutra } from '@yantra-core/sutra';
 
 // creates a new sutra instance
 const sutra = new Sutra();
@@ -236,7 +236,7 @@ Consider a tower defense game where we need separate logic for round management 
 see: `./examples/nested-sutra.js`
 
 ```javascript
-import Sutra from '@yantra-core/sutra';
+import { Sutra } from '@yantra-core/sutra';
 
 let roundSutra = new Sutra();
 roundSutra.addCondition('roundStarted', (entity, gameState) => gameState.roundStarted === true);
