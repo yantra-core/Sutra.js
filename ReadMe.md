@@ -17,7 +17,6 @@ Sutras can be exported to a human-readable format ( with `i18n` support ). It is
 | sutra.js    | [Link](https://yantra.gg/sutra.js)        | 55kb      |
 | sutra.min.js| [Link](https://yantra.gg/sutra.min.js)    | 23kb      |
 
-
 ### Crafting Sutras
 
 Here we have the human read-able *exported* Sutra definition that we will get at the end:
@@ -32,13 +31,18 @@ if isBoss
 
 Written as Javascript, this Sutra will be responsible for changing the color and speed of `isBoss` when `isHealthLow`.
 
-```js
-sutra
-  .if('isBoss')
-  .if('isHealthLow')
-  .then('updateEntity', { color: 0xff0000, speed: 5 });
+```html
+<script src="https://yantra.gg/sutra.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    let sutra = SUTRA.createSutra();
+    sutra
+      .if('isBoss')
+      .if('isHealthLow')
+      .then('updateEntity', { color: 0xff0000, speed: 5 });
+  });
+</script>
 ```
-
 <a href="#features">Full Feature List</a>
 
 ## Live Demos
