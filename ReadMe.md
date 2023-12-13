@@ -11,11 +11,15 @@ Sutra is an ideal tool for JavaScript game development. Using Sutra will signifi
 
 Sutras can be exported to a human-readable format ( with `i18n` support ). It is easy to read your Sutra in plain English and then modify it using the fluent API.
 
+<a href="#features">Full Feature List</a>
+
 **Release 1.8.0**
 | Files          | CDN                                         | Size |
 |---------------|--------------------------------------------------|-----------|
 | sutra.js    | [Link](https://yantra.gg/sutra.js)        | 55kb      |
 | sutra.min.js| [Link](https://yantra.gg/sutra.min.js)    | 23kb      |
+
+
 
 ### Crafting Sutras
 
@@ -43,9 +47,103 @@ Written as Javascript, this Sutra will be responsible for changing the color and
   });
 </script>
 ```
-<a href="#features">Full Feature List</a>
-
 ## Live Demos
+
+### Simple Weather Example
+
+[Try Demo On Yantra](https://yantra.gg/sutra/simple.html) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/pen/yLZWebE)
+
+```js
+<body>
+  <script src="https://yantra.gg/sutra.js"></script>
+  <h1>Sutra Simple Weather Rules</h1>
+  <div id="output"></div>
+  <pre><code id="humanOutput"></code></pre>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let sutra = initializeSutra(); // Initialize Sutra
+      // update human readable output
+      let humanOutput = document.getElementById('humanOutput');
+      humanOutput.innerHTML = sutra.toEnglish();
+      executeSutra(sutra);
+    });
+
+    function initializeSutra() {
+      let sutra = SUTRA.createSutra();
+
+      // Define conditions
+      sutra.addCondition('isSunny', (data) => data.isSunny);
+      sutra.addCondition('isWindy', (data) => data.isWindy);
+      sutra.addCondition('isRaining', (data) => data.isRaining);
+
+      // Define nested actions
+      sutra
+        .if('isSunny')
+        .then((rules) => {
+          rules
+            .if('isWindy')
+            .then('findShelter')
+            .else('enjoySun');
+        })
+        .then('planPicnic');
+
+      sutra
+        .if('isRaining')
+        .then('stayIndoors')
+        .else((rules) => {
+          rules
+            .if('isWindy')
+            .then('wearWindbreaker')
+            .else('goForAWalk');
+        });
+
+      // Define event listeners for actions
+      sutra.on('findShelter', (data) => logOutput("It's sunny but windy. Finding shelter!"));
+      sutra.on('enjoySun', (data) => logOutput("It's a perfect sunny day. Enjoying the sun!"));
+      sutra.on('planPicnic', (data) => logOutput("Planning a picnic for the sunny day."));
+      sutra.on('stayIndoors', (data) => logOutput("It's raining. Better stay indoors."));
+      sutra.on('wearWindbreaker', (data) => logOutput("It's windy. Wearing a windbreaker."));
+      sutra.on('goForAWalk', (data) => logOutput("It's a nice day. Going for a walk."));
+
+      return sutra;
+    }
+
+    function executeSutra(sutra) {
+      // Array of test data for a week, including the day of the week
+      let weekWeather = [
+        { day: 'Monday', isSunny: true, isWindy: false, isRaining: false },
+        { day: 'Tuesday', isSunny: false, isWindy: true, isRaining: false },
+        { day: 'Wednesday', isSunny: false, isWindy: false, isRaining: true },
+        { day: 'Thursday', isSunny: true, isWindy: true, isRaining: false },
+        { day: 'Friday', isSunny: false, isWindy: false, isRaining: false },
+        { day: 'Saturday', isSunny: true, isWindy: false, isRaining: true },
+        { day: 'Sunday', isSunny: true, isWindy: false, isRaining: false }
+      ];
+
+      logOutput(`++++++++++++++++++++++++++++++++++++++++++++++`);
+      // Iterate over the weekWeather array and tick the Sutra with each day's data
+      weekWeather.forEach(dayWeather => {
+        // Constructing the emoji string based on conditions
+        let weatherEmoji = '';
+        weatherEmoji += dayWeather.isSunny ? '☀️' : '';
+        weatherEmoji += dayWeather.isWindy ? '💨' : '';
+        weatherEmoji += dayWeather.isRaining ? '🌧️' : '';
+
+        logOutput(`${weatherEmoji} ${dayWeather.day}`);
+        sutra.tick(dayWeather);
+        logOutput(`++++++++++++++++++++++++++++++++++++++++++++++`);
+      });
+    }
+
+    function logOutput(message) {
+      let output = document.getElementById('output');
+      let newElement = document.createElement('div');
+      newElement.textContent = message;
+      output.appendChild(newElement);
+    }
+  </script>
+</body>
+```
 
 ### Stand-alone Sutra Example
 
