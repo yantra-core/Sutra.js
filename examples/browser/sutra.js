@@ -599,17 +599,15 @@ var Sutra = /*#__PURE__*/function () {
       }
 
       // Integrate conditions from the subSutra
-      if (subSutra.conditions) {
-        Object.entries(subSutra.conditions).forEach(function (_ref) {
-          var _ref2 = _slicedToArray(_ref, 2),
-            conditionName = _ref2[0],
-            condition = _ref2[1];
-          if (_this.conditions[conditionName]) {
-            console.warn("Condition '".concat(conditionName, "' from subtree '").concat(name, "' will overwrite an existing condition in the main Sutra."));
-          }
-          _this.addCondition(conditionName, condition);
-        });
-      }
+      Object.entries(subSutra.conditions).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+          conditionName = _ref2[0],
+          condition = _ref2[1];
+        if (_this.conditions[conditionName]) {
+          console.warn("Condition '".concat(conditionName, "' from subtree '").concat(name, "' will overwrite an existing condition in the main Sutra."));
+        }
+        _this.addCondition(conditionName, condition);
+      });
 
       // always combine conditions from subtrees
       subSutra.conditions = _objectSpread(_objectSpread({}, this.conditions), subSutra.conditions);

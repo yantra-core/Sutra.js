@@ -51,7 +51,8 @@ Written as Javascript, this Sutra will be responsible for changing the color and
 
 ### Simple Weather Example
 
-[Try Demo On Yantra](https://yantra.gg/sutra/simple.html) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/pen/yLZWebE)
+[Try Demo On Yantra](https://yantra.gg/sutra/simple.html) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/full/yLZWebE)
+
 
 ```js
 <body>
@@ -149,7 +150,7 @@ Written as Javascript, this Sutra will be responsible for changing the color and
 
 **Moves CSS Dot based on WASD Keyboard Inputs**
 
-[Try Demo On Yantra](https://yantra.gg/sutra/) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/pen/GRzLBmV)
+[Try Demo On Yantra](https://yantra.gg/sutra/) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/full/GRzLBmV)
 
 https://github.com/yantra-core/sutra/assets/70011/12e2a64a-1be4-42c5-9e0a-c97c0caba081
 
@@ -157,7 +158,7 @@ https://github.com/yantra-core/sutra/assets/70011/12e2a64a-1be4-42c5-9e0a-c97c0c
 
 **Tower Defense Type Game**
 
-[Try Demo On Yantra](https://yantra.gg/mantra/examples/offline/sutra-level-editor) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/pen/KKJbeva) 
+[Try Demo On Yantra](https://yantra.gg/mantra/examples/offline/sutra-level-editor) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/full/KKJbeva) 
 
 https://github.com/yantra-core/sutra/assets/70011/edd4d09a-f48b-431e-bf5b-377ad60e3c49
 
