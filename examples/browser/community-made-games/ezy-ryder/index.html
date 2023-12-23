@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Ezy-Ryder</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <nav>
+        <span id="score">
+            <b>
+                You have 7 lives. Navigate through the game, avoiding enemies while collecting gold coins to score points and win the game. Be cautious, as colliding with enemies will cost you a life. Good luck on your journey!<br>
+                W = Forward,
+                A = Left,
+                S = Bottom,
+                D = Right
+            </b>
+            <br>
+            <button onclick="startGame()">Click</button>
+
+        </span>
+       </nav>
+       <div class="custom-alert" id="customAlert">
+        <div class="alert-content">
+            <span id="alertMessage">
+                <img src="static/Game Over.png">
+            </span>
+            <button onclick="newAlert()">New Game</button>
+        </div>
+    </div>
+        <script src="https://yantra.gg/sutra.js"></script>
+        <script src="index.js" ></script>
+    </body>
+</html>
