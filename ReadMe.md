@@ -49,6 +49,10 @@ Written as Javascript, this Sutra will be responsible for changing the color and
 ```
 ## Live Demos
 
+### Full-featured Demo
+
+[https://yantra.gg/mantra/home](https://yantra.gg/mantra/home)
+
 ### Simple Weather Example
 
 [Try Demo On Yantra](https://yantra.gg/sutra/simple.html) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/full/yLZWebE)
