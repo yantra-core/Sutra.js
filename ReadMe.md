@@ -47,11 +47,22 @@ Written as Javascript, this Sutra will be responsible for changing the color and
   });
 </script>
 ```
+
+*This is small display of API. Scroll further down to see full API usage.*
+
 ## Live Demos
 
 ### Full-featured Demo
 
+Sutra.js is responsible for all Behavior Trees in [Mantra.js](https://github.com/yantra-core/mantra.js). Here we have a full-featured demo running a composition of Sutras. Remember, Sutras can be nested through `Sutra.use()`.
+
+Our goal is to create a common Sutra library where developers can create and share Sutras. See: [mantra-sutras](https://github.com/yantra-core/Mantra.js/tree/master/mantra-sutras)
+
 [https://yantra.gg/mantra/home](https://yantra.gg/mantra/home)
+
+
+https://github.com/yantra-core/Sutra.js/assets/70011/ec6d4518-a9aa-47e6-9299-9c6e1dc55b35
+
 
 ### Simple Weather Example
 
