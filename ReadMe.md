@@ -162,7 +162,7 @@ https://github.com/yantra-core/sutra/assets/70011/12e2a64a-1be4-42c5-9e0a-c97c0c
 
 **Tower Defense Type Game**
 
-[Try Demo On Yantra](https://yantra.gg/mantra/examples/offline/sutra-level-editor) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/full/KKJbeva) 
+[Try Demo On Yantra](https://yantra.gg/mantra/tower) &nbsp;&nbsp;&nbsp; [Try Demo On Codepen](https://codepen.io/Marak-Squires/full/KKJbeva) 
 
 https://github.com/yantra-core/sutra/assets/70011/edd4d09a-f48b-431e-bf5b-377ad60e3c49
 
