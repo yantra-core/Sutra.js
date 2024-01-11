@@ -11,7 +11,19 @@ Sutra is an ideal tool for JavaScript game development. Using Sutra will signifi
 
 Sutras can be exported to a human-readable format ( with `i18n` support ). It is easy to read your Sutra in plain English and then modify it using the fluent API.
 
-<a href="#features">Full Feature List</a>
+## Features
+
+- **Conditional Logic** - Simple `if`, `then`, `else` constructs to define trees
+- **Composite Conditions** - Composite conditional logic using `AND`, `OR`, `NOT`
+- **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
+- **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
+- **Action Control** - Define action objects with scoped parameters
+- **Data Transformation with `.map()`** - Transform context data within the tree using custom mapping functions
+- **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
+- **Tree Querying** - Query and manipulate the tree using intuitive string selectors
+- **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
+- **Human-readable Exports** - Support for exporting sutras to plain English
+- **Sutra JSON Format** - Import and Export tree definitions in `sutra.json` format
 
 **Release 1.8.0**
 | Files          | CDN                                         | Size |
@@ -56,7 +68,7 @@ Written as Javascript, this Sutra will be responsible for changing the color and
 
 Sutra.js is responsible for all Behavior Trees in [Mantra.js](https://github.com/yantra-core/mantra.js). Here we have a full-featured demo running a composition of Sutras. Remember, Sutras can be nested through `Sutra.use()`.
 
-Our goal is to create a common Sutra library where developers can create and share Sutras. See: [mantra-sutras](https://github.com/yantra-core/Mantra.js/tree/master/mantra-sutras)
+Our goal is to curate a common collection of Sutras for developers to share and re-use. You can find our current Sutras and gallery links here: [mantra-sutras](https://github.com/yantra-core/Mantra.js/tree/master/mantra-sutras)
 
 [https://yantra.gg/mantra/home](https://yantra.gg/mantra/home)
 
@@ -494,24 +506,6 @@ sutra.addAction({
 });
 
 ```
-
-<a name="features"></a>
-
-## Features
-
-- **Conditional Logic** - Simple `if`, `then`, `else` constructs to define trees
-- **Composite Conditions** - Composite conditional logic using `AND`, `OR`, `NOT`
-- **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
-- **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
-- **Action Control** - Define action objects with scoped parameters
-- **Data Transformation with `.map()`** - Transform context data within the tree using custom mapping functions
-- **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
-- **Tree Querying** - Query and manipulate the tree using intuitive string selectors
-- **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
-- **Human-readable Exports** - Support for exporting sutras to plain English
-- **Sutra JSON Format** - Import and Export tree definitions in `sutra.json` format
-
-*Browser package is `23kb` with zero dependencies*
 
 
 ## Conditional and Logic Operators
