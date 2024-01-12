@@ -18,7 +18,7 @@ Sutras can be exported to a human-readable format ( with `i18n` support ). It is
 - **Nested Subtrees** - Re-use Sutras for easy-to-understand composability of complex behavior
 - **Dynamic Condition Evaluation** - Evaluate conditions based on entity data or global game state
 - **Action Control** - Define action objects with scoped parameters
-- **Data Transformation with `.map()`** - Transform context data within the tree using custom mapping functions
+- **Data Transformation with `.map()`** - Transform context data within the tree using custom maps
 - **Node Management** - `add`, `update`, `find`, and `remove` nodes within the tree
 - **Tree Querying** - Query and manipulate the tree using intuitive string selectors
 - **Event-Driven Architecture** - `.on()` and `.emit()` methods for managing actions
