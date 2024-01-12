@@ -1,10 +1,11 @@
 import Sutra from '../lib/sutra.js';
-// import fs from 'fs';
+import fs from 'fs';
 // creates a new sutra instance
 const sutra = new Sutra();
 
 // adds a new condition as function which returns value
 sutra.addCondition('isBoss', (entity) => entity.type === 'BOSS');
+sutra.addCondition('isRoundStarted', (data) => data.roundStarted);
 
 // adds a new condition using DSL conditional object
 sutra.addCondition('isHealthLow', {
@@ -13,80 +14,37 @@ sutra.addCondition('isHealthLow', {
   value: 50
 });
 
-sutra.if('isBoss', 'isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-
-sutra.if('isBoss').if('isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-
-/*
-sutra
-  .if('isBoss')
-  .if('isHealthLow')
-  .then('entity::updateEntity', { color: 0xff0000, speed: 5 })
-  .then('entity::createEntity', { color: 0x00ff00, speed: 1 })
-  .else('entity::updateEntity', { color: 0x0000ff, speed: 10 });
-*/
+sutra.on('spawnEnemyUnits', () => {
+  console.log('spawning enemy units');
+})
 
 
 sutra
-  .if('roundStarted')
-  .if('roundNotRunning')
+  .if('isRoundStarted')
   .then('spawnEnemyUnits')
-  .then('startRound')
-
-
-// this is how we currently do it
-sutra.addAction({
-  if: ['blockHitPlayer'],
-  then: [{
-    if: ['blockIsRed'],
-    then: [{ action: 'damagePlayer' }],
-    else: [{ action: 'healPlayer' }]
-  }, {
-    action: 'removeBlock'
-  }]
-});
-
-// alternative syntax 
-
-
-
-// TODO: ensure all these fluent APIs are supported:
-sutra.if('isBoss').if('isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-sutra.if('isBoss', 'isHealthLow').then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-
-sutra.addAction({
-  if: 'isBoss',
-  then: [{
-    if: 'isHealthLow',
-    then: [{
-      action: 'entity::updateEntity',
-      data: { color: 0xff0000, speed: 5 } // Example with multiple properties
-    }]
-  }]
-});
-
-sutra
-  .if('isBoss')
-  .then((rules) => {
-    rules
-      .if('isHealthLow')
-      .then('entity::updateEntity', { color: 0xff0000, speed: 5 });
-  })
-
-
-  sutra
-  .if('blockHitWall')
-  .then('damageWall')
-  .then('removeBlock');
 
 
 // exports the sutra as json
 const json = sutra.toJSON();
-console.log(json);
+// console.log(json);
 
 // exports the sutra as plain english
 const english = sutra.toEnglish();
 console.log(english);
+
+let gamestate = {
+  roundStarted: false
+};
+
+
+// nothing happens, roundStarted is false
+sutra.tick(gamestate);
+
+// roundStarted is true, so spawnEnemyUnits is called
+gamestate.roundStarted = true;
+sutra.tick(gamestate);
+
+
 
 // write the english to test.txt file
 // fs.writeFileSync('test.txt', english);

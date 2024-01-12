@@ -68,18 +68,6 @@ function generateRandomColorInt(entity, gameState, node) {
   return Math.floor(Math.random() * 255);
 }
 
-/*
-
-sutra.addAction({
-  if: ['isBoss', 'isHealthLow'],
-  then: [{
-    action: 'entity::updateEntity',
-    data: { color: generateRandomColorInt, speed: 5 }
-  }]
-});
-*/
-
-
 // create a simple array of entities
 let allEntities = [
   { id: 1, type: 'BOSS', health: 100 },

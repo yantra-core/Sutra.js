@@ -1,8 +1,8 @@
-import sutra from '../index.js';
+import Sutra from '../lib/sutra.js';
 
 function testRules(game) {
 
-  let rules = new sutra.Sutra();
+  let rules = new Sutra();
   // return rules;
 
   // Define health level conditions for the boss

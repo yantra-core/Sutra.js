@@ -41,13 +41,16 @@ gameBehavior.addAction({
   ]
 });
 
-// In game loop, with example data
-gameBehavior.tick({ enemyNear: true, health: 40 });
 
 // Serialize to JSON
 const jsonRepresentation = gameBehavior.serializeToJson();
-console.log(jsonRepresentation);
+// console.log(jsonRepresentation);
 
 // Export to English
 const englishRepresentation = gameBehavior.exportToEnglish();
 console.log(englishRepresentation);
+
+// In game loop, with example data
+gameBehavior.tick({ enemyNear: true, health: 60 });
+
+gameBehavior.tick({ enemyNear: true, health: 40 });
