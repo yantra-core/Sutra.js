@@ -6,7 +6,7 @@ tap.test('Sutra Library Tests', async (parent) => {
   parent.test('should correctly evaluate conditions', async (t) => {
     const sutra = new Sutra();
     sutra.addCondition('isTrue', () => true);
-    t.equal(sutra.evaluateCondition('isTrue', {}), true, 'isTrue condition should return true');
+    t.equal(sutra.evaluateCondition('isTrue', null, {}), true, 'isTrue condition should return true');
   });
 
   // Test for action execution based on conditions
@@ -98,7 +98,7 @@ tap.test('Sutra Library Tests', async (parent) => {
     // Test data
     const testData = { health: 40 };
 
-    t.equal(sutra.evaluateCondition('isHealthLow', testData), true, 'isHealthLow should return true for health < 50');
+    t.equal(sutra.evaluateCondition('isHealthLow', null, testData), true, 'isHealthLow should return true for health < 50');
 
     t.end();
   });
@@ -115,8 +115,8 @@ tap.test('Sutra Library Tests', async (parent) => {
       value: 50
     });
 
-    t.equal(sutra.evaluateCondition('isHealthLow', { health: 40 }), true, 'isHealthLow should return true for health < 50');
-    t.equal(sutra.evaluateCondition('isHealthLow', { health: 60 }), false, 'isHealthLow should return false for health >= 50');
+    t.equal(sutra.evaluateCondition('isHealthLow', null, { health: 40 }), true, 'isHealthLow should return true for health < 50');
+    t.equal(sutra.evaluateCondition('isHealthLow', null, { health: 60 }), false, 'isHealthLow should return false for health >= 50');
 
     t.end();
   });
@@ -132,9 +132,9 @@ tap.test('Sutra Library Tests', async (parent) => {
     sutra.addCondition('invalidCountEquals10', (data, gameState) => gameState.ents.INVALID.length === 10);
 
     // Perform tests for custom function shorthand
-    t.equal(sutra.evaluateCondition('blockCountEquals0', {}, { ents: { BLOCK: [] } }), true, 'blockCountEquals0 should return true when BLOCK count is 0');
-    t.equal(sutra.evaluateCondition('blockCountEquals0', {}, { ents: { BLOCK: [{}] } }), false, 'blockCountEquals0 should return false when BLOCK count is not 0');
-    t.equal(sutra.evaluateCondition('invalidCountEquals10', {}, { ents: { BLOCK: [] } }), false, 'invalidCountEquals10 should return false when property lookup is invalid');
+    t.equal(sutra.evaluateCondition('blockCountEquals0', null, {}, { ents: { BLOCK: [] } }), true, 'blockCountEquals0 should return true when BLOCK count is 0');
+    t.equal(sutra.evaluateCondition('blockCountEquals0', null, {}, { ents: { BLOCK: [{}] } }), false, 'blockCountEquals0 should return false when BLOCK count is not 0');
+    t.equal(sutra.evaluateCondition('invalidCountEquals10', null, {}, { ents: { BLOCK: [] } }), false, 'invalidCountEquals10 should return false when property lookup is invalid');
 
     // Test each DSL op
     sutra.addCondition('lessThanTest', { op: 'lessThan', property: 'value', value: 10 });
@@ -145,12 +145,12 @@ tap.test('Sutra Library Tests', async (parent) => {
     sutra.addCondition('greaterThanOrEqualTest', { op: 'greaterThanOrEqual', property: 'value', value: 10 });
 
     // Perform tests
-    t.equal(sutra.evaluateCondition('lessThanTest', { value: 5 }), true, 'lessThanTest should return true for value < 10');
-    t.equal(sutra.evaluateCondition('greaterThanTest', { value: 15 }), true, 'greaterThanTest should return true for value > 10');
-    t.equal(sutra.evaluateCondition('equalsTest', { value: 10 }), true, 'equalsTest should return true for value == 10');
-    t.equal(sutra.evaluateCondition('notEqualsTest', { value: 15 }), true, 'notEqualsTest should return true for value != 10');
-    t.equal(sutra.evaluateCondition('lessThanOrEqualTest', { value: 10 }), true, 'lessThanOrEqualTest should return true for value <= 10');
-    t.equal(sutra.evaluateCondition('greaterThanOrEqualTest', { value: 10 }), true, 'greaterThanOrEqualTest should return true for value >= 10');
+    t.equal(sutra.evaluateCondition('lessThanTest', null, { value: 5 }), true, 'lessThanTest should return true for value < 10');
+    t.equal(sutra.evaluateCondition('greaterThanTest', null, { value: 15 }), true, 'greaterThanTest should return true for value > 10');
+    t.equal(sutra.evaluateCondition('equalsTest', null, { value: 10 }), true, 'equalsTest should return true for value == 10');
+    t.equal(sutra.evaluateCondition('notEqualsTest', null, { value: 15 }), true, 'notEqualsTest should return true for value != 10');
+    t.equal(sutra.evaluateCondition('lessThanOrEqualTest', null, { value: 10 }), true, 'lessThanOrEqualTest should return true for value <= 10');
+    t.equal(sutra.evaluateCondition('greaterThanOrEqualTest', null, { value: 10 }), true, 'greaterThanOrEqualTest should return true for value >= 10');
 
     t.end();
   });
@@ -178,12 +178,12 @@ tap.test('Sutra Library Tests - update condition test', async (parent) => {
       property: 'value',
       value: 10
     });
-    t.equal(sutra.evaluateCondition('dslCondition', { value: 15 }), true, 'dslCondition should be updated to return true for value > 10');
+    t.equal(sutra.evaluateCondition('dslCondition', null, { value: 15 }), true, 'dslCondition should be updated to return true for value > 10');
 
     // Updating an array condition
     sutra.addCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 5 }]);
     sutra.updateCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 10 }]);
-    t.equal(sutra.evaluateCondition('arrayCondition', { value: 10 }), true, 'arrayCondition should be updated to return true for value == 10');
+    t.equal(sutra.evaluateCondition('arrayCondition', null, { value: 10 }), true, 'arrayCondition should be updated to return true for value == 10');
 
     // Adding a new condition to an existing DSL condition
     sutra.updateCondition('dslCondition', {
@@ -191,7 +191,7 @@ tap.test('Sutra Library Tests - update condition test', async (parent) => {
       property: 'value',
       value: 20
     }, true);
-    t.equal(sutra.evaluateCondition('dslCondition', { value: 20 }), true, 'dslCondition should add a new condition and return true for value == 20');
+    t.equal(sutra.evaluateCondition('dslCondition', null, { value: 20 }), true, 'dslCondition should add a new condition and return true for value == 20');
 
 
     t.end();
@@ -220,12 +220,12 @@ tap.test('Sutra Library Tests - update condition test', async (parent) => {
       property: 'value',
       value: 10
     }]);
-    t.equal(sutra.evaluateCondition('dslCondition', { value: 15 }), true, 'dslCondition should be updated to return true for value > 10');
+    t.equal(sutra.evaluateCondition('dslCondition', null, { value: 15 }), true, 'dslCondition should be updated to return true for value > 10');
 
     // Updating an array condition
     sutra.addCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 5 }]);
     sutra.updateCondition('arrayCondition', [{ op: 'equals', property: 'value', value: 10 }]);
-    t.equal(sutra.evaluateCondition('arrayCondition', { value: 10 }), true, 'arrayCondition should be updated to return true for value == 10');
+    t.equal(sutra.evaluateCondition('arrayCondition', null, { value: 10 }), true, 'arrayCondition should be updated to return true for value == 10');
 
     // get the updated condition by name
     const updatedCondition = sutra.getCondition('dslCondition');
@@ -238,7 +238,7 @@ tap.test('Sutra Library Tests - update condition test', async (parent) => {
       property: 'value',
       value: 20
     }, true);
-    t.equal(sutra.evaluateCondition('dslCondition', { value: 20 }), true, 'dslCondition should add a new condition and return true for value == 20');
+    t.equal(sutra.evaluateCondition('dslCondition', null, { value: 20 }), true, 'dslCondition should add a new condition and return true for value == 20');
 
     t.end();
   });

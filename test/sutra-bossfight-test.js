@@ -69,7 +69,7 @@ tap.test('Boss fight behavior tree test', async (t) => {
       sutra.tick(entity, gameState);
     });
     // Check block count condition
-    blockCountEquals0Detected = sutra.evaluateCondition('blockCountEquals0', {}, gameState);
+    blockCountEquals0Detected = sutra.evaluateCondition('blockCountEquals0', null, {}, gameState);
 
   }
 
