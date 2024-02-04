@@ -18,9 +18,9 @@ tap.test('Sutra Library Tests with GameState Context', async (parent) => {
     const testData = { isValid: true };
     const testGameState = { isGameRunning: true };
 
-    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', null, testData, testGameState), true, 'Condition with valid data and gameState should return true');
+    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', testData, testGameState), true, 'Condition with valid data and gameState should return true');
     testGameState.isGameRunning = false;
-    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', null, testData, testGameState), false, 'Condition with invalid gameState should return false');
+    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', testData, testGameState), false, 'Condition with invalid gameState should return false');
 
     // Test composite conditions with gameState
     sutra.addCondition('compositeCondition', {
@@ -30,7 +30,7 @@ tap.test('Sutra Library Tests with GameState Context', async (parent) => {
 
     // Test conditions without gameState
     sutra.addCondition('isDataValid', data => data.isValid);
-    t.equal(sutra.evaluateCondition('isDataValid', null, testData), true, 'Condition without gameState should still function correctly');
+    t.equal(sutra.evaluateCondition('isDataValid', testData), true, 'Condition without gameState should still function correctly');
 
     // Test with undefined or null gameState
     /*
@@ -57,11 +57,11 @@ tap.test('Sutra Integration Tests with GameState Context', async (parent) => {
     const testData = { isValid: true };
     const testGameState = { isGameRunning: true };
 
-    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', null, testData, testGameState), true, 'isDataAndGameStateValid should return true when both data and gameState are valid');
+    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', testData, testGameState), true, 'isDataAndGameStateValid should return true when both data and gameState are valid');
 
     // Change gameState and test again
     testGameState.isGameRunning = false;
-    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', null, testData, testGameState), false, 'isDataAndGameStateValid should return false when gameState is invalid');
+    t.equal(sutra.evaluateCondition('isDataAndGameStateValid', testData, testGameState), false, 'isDataAndGameStateValid should return false when gameState is invalid');
 
     t.end();
   });
@@ -112,11 +112,11 @@ tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
       }
     };
 
-    t.equal(sutra.evaluateCondition('nestedValueCheck', null, {}, gameState), true, 'nestedValueCheck should return true for blockCount < 5');
+    t.equal(sutra.evaluateCondition('nestedValueCheck', {}, gameState), true, 'nestedValueCheck should return true for blockCount < 5');
 
     // Modifying the gameState to change the block count
     gameState.level.stats.blockCount = 6;
-    t.equal(sutra.evaluateCondition('nestedValueCheck', null, {}, gameState), false, 'nestedValueCheck should return false for blockCount >= 5');
+    t.equal(sutra.evaluateCondition('nestedValueCheck', {}, gameState), false, 'nestedValueCheck should return false for blockCount >= 5');
 
     // Testing with different types of nested values
     sutra.addCondition('nestedStringCheck', {
@@ -126,10 +126,10 @@ tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
     });
 
     gameState.level.description = 'Level 1';
-    t.equal(sutra.evaluateCondition('nestedStringCheck', null, {}, gameState), true, 'nestedStringCheck should return true for matching string');
+    t.equal(sutra.evaluateCondition('nestedStringCheck', {}, gameState), true, 'nestedStringCheck should return true for matching string');
 
     gameState.level.description = 'Level 2';
-    t.equal(sutra.evaluateCondition('nestedStringCheck', null, {}, gameState), false, 'nestedStringCheck should return false for non-matching string');
+    t.equal(sutra.evaluateCondition('nestedStringCheck', {}, gameState), false, 'nestedStringCheck should return false for non-matching string');
 
     // Testing with an array
     sutra.addCondition('nestedArrayLengthCheck', {
@@ -139,10 +139,10 @@ tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
     });
 
     gameState.level.enemies = ['enemy1', 'enemy2'];
-    t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', null, {}, gameState), true, 'nestedArrayLengthCheck should return true for array length >= 2');
+    t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', {}, gameState), true, 'nestedArrayLengthCheck should return true for array length >= 2');
 
     gameState.level.enemies = ['enemy1'];
-    t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', null, {}, gameState), false, 'nestedArrayLengthCheck should return false for array length < 2');
+    t.equal(sutra.evaluateCondition('nestedArrayLengthCheck', {}, gameState), false, 'nestedArrayLengthCheck should return false for array length < 2');
 
 
     // Testing with an undefined array
@@ -154,7 +154,7 @@ tap.test('Sutra Deeply Nested GameState Tests', async (parent) => {
 
     // Simulating gameState where the array is undefined
     delete gameState.level.enemies; // or gameState.level.enemies = undefined;
-    t.equal(sutra.evaluateCondition('nestedUndefinedArrayLengthCheck', null, {}, gameState), true, 'nestedUndefinedArrayLengthCheck should return true for undefined array length equaling 0');
+    t.equal(sutra.evaluateCondition('nestedUndefinedArrayLengthCheck', {}, gameState), true, 'nestedUndefinedArrayLengthCheck should return true for undefined array length equaling 0');
 
     t.end();
   });
@@ -178,11 +178,11 @@ tap.test('Sutra GameState Array Item Test', async (parent) => {
       }
     };
 
-    t.equal(sutra.evaluateCondition('arrayItemCheck', null, {}, gameState), true, 'arrayItemCheck should return true for specific array item matching');
+    t.equal(sutra.evaluateCondition('arrayItemCheck', {}, gameState), true, 'arrayItemCheck should return true for specific array item matching');
 
     // Changing the array item to a different value
     gameState.level.powerUps[1] = 'invisibility';
-    t.equal(sutra.evaluateCondition('arrayItemCheck', null, {}, gameState), false, 'arrayItemCheck should return false for non-matching array item');
+    t.equal(sutra.evaluateCondition('arrayItemCheck', {}, gameState), false, 'arrayItemCheck should return false for non-matching array item');
 
     t.end();
   });

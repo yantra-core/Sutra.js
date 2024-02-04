@@ -98,7 +98,7 @@ tap.test('Sutra Library Tests', async (parent) => {
     // Test data
     const testData = { health: 40 };
 
-    t.equal(sutra.evaluateCondition('isHealthLow', null, testData), true, 'isHealthLow should return true for health < 50');
+    t.equal(sutra.evaluateCondition('isHealthLow', testData), true, 'isHealthLow should return true for health < 50');
 
     t.end();
   });
@@ -115,8 +115,8 @@ tap.test('Sutra Library Tests', async (parent) => {
       value: 50
     });
 
-    t.equal(sutra.evaluateCondition('isHealthLow', null, { health: 40 }), true, 'isHealthLow should return true for health < 50');
-    t.equal(sutra.evaluateCondition('isHealthLow', null, { health: 60 }), false, 'isHealthLow should return false for health >= 50');
+    t.equal(sutra.evaluateCondition('isHealthLow', { health: 40 }), true, 'isHealthLow should return true for health < 50');
+    t.equal(sutra.evaluateCondition('isHealthLow', { health: 60 }), false, 'isHealthLow should return false for health >= 50');
 
     t.end();
   });
@@ -133,12 +133,12 @@ tap.test('Sutra Library Tests', async (parent) => {
     sutra.addCondition('greaterThanOrEqualTest', { op: 'greaterThanOrEqual', property: 'value', value: 10 });
 
     // Perform tests
-    t.equal(sutra.evaluateCondition('lessThanTest', null, { value: 5 }), true, 'lessThanTest should return true for value < 10');
-    t.equal(sutra.evaluateCondition('greaterThanTest', null, { value: 15 }), true, 'greaterThanTest should return true for value > 10');
-    t.equal(sutra.evaluateCondition('equalsTest', null, { value: 10 }), true, 'equalsTest should return true for value == 10');
-    t.equal(sutra.evaluateCondition('notEqualsTest', null, { value: 15 }), true, 'notEqualsTest should return true for value != 10');
-    t.equal(sutra.evaluateCondition('lessThanOrEqualTest', null, { value: 10 }), true, 'lessThanOrEqualTest should return true for value <= 10');
-    t.equal(sutra.evaluateCondition('greaterThanOrEqualTest', null, { value: 10 }), true, 'greaterThanOrEqualTest should return true for value >= 10');
+    t.equal(sutra.evaluateCondition('lessThanTest', { value: 5 }), true, 'lessThanTest should return true for value < 10');
+    t.equal(sutra.evaluateCondition('greaterThanTest', { value: 15 }), true, 'greaterThanTest should return true for value > 10');
+    t.equal(sutra.evaluateCondition('equalsTest', { value: 10 }), true, 'equalsTest should return true for value == 10');
+    t.equal(sutra.evaluateCondition('notEqualsTest', { value: 15 }), true, 'notEqualsTest should return true for value != 10');
+    t.equal(sutra.evaluateCondition('lessThanOrEqualTest', { value: 10 }), true, 'lessThanOrEqualTest should return true for value <= 10');
+    t.equal(sutra.evaluateCondition('greaterThanOrEqualTest', { value: 10 }), true, 'greaterThanOrEqualTest should return true for value >= 10');
 
     t.end();
   });
