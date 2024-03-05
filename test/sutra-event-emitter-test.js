@@ -55,7 +55,7 @@ tap.test('Subtree Event Emission with Shared Listeners', (t) => {
   const mainSutra = new Sutra();
   const subSutra = createBasicSutra();
 
-  mainSutra.use(subSutra, 'subtree'); // Share listeners
+  mainSutra.use(subSutra, 'subtree', 0, true); // Share listeners
 
   let eventEmittedInSubtree = false;
   subSutra.on('entity::updateEntity', () => {
@@ -70,14 +70,15 @@ tap.test('Subtree Event Emission with Shared Listeners', (t) => {
 
   subSutra.tick({ type: 'BOSS', health: 30 });
 });
-
 tap.test('Event Emission from Main Sutra to Subtree Listener', (t) => {
   const mainSutra = new Sutra();
   const subSutra = createBasicSutra();
 
   // Use the subtree with shared listeners
-  mainSutra.use(subSutra, 'subtree', true);
-
+  mainSutra.use(subSutra, 'subtree', false, true);
+  // TODO: needs new test for double event if both tree and listeners are shared
+  // Remark: in most cases you should *not* need to ever share both, throw / warn might be wise
+  // mainSutra.use(subSutra, 'subtree', true, true);
   // Add a listener in the subtree
   subSutra.on('main::customEvent', () => {
     t.pass('Subtree listener caught event emitted from main Sutra');
