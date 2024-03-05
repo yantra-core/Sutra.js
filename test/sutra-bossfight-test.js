@@ -70,7 +70,6 @@ tap.test('Boss fight behavior tree test', async (t) => {
     });
     // Check block count condition
     blockCountEquals0Detected = sutra.evaluateCondition('blockCountEquals0', {}, gameState);
-
   }
 
   // Test case: Boss health is above 50, should not detect

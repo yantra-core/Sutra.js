@@ -16,8 +16,7 @@ sutra.addCondition('isHealthLow', {
 
 sutra.on('spawnEnemyUnits', () => {
   console.log('spawning enemy units');
-})
-
+});
 
 sutra
   .if('isRoundStarted')
